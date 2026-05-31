@@ -3,83 +3,179 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>피알어스 분양현장 지도 대시보드 (카카오맵)</title>
+<title>PRUS Insight — Pre-Sale Sites Map</title>
 <script src="../../auth.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT,WONK@9..144,300..900,0..100,0..1&family=Noto+Serif+KR:wght@300;400;600;700;900&family=IBM+Plex+Sans+KR:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#0f1419; --panel:#161c24; --panel2:#1c242e; --line:#27313d;
-  --txt:#e7edf3; --muted:#8a97a6; --accent:#3aa0ff; --accent2:#16c79a;
-  --warn:#ffb547; --dim:#5a6675; --end:#6b7785;
+  /* PRUS light tokens (topbar/footer) */
+  --bg:#F4EFE6; --ink:#1C1B17; --ink-2:#3D3A33; --muted:#857F70;
+  --rule:#D6CFBE; --rule-2:#BFB8A4; --accent:#B8482B; --accent-2:#2A4F4B;
+  --font-serif:"Fraunces","Noto Serif KR",Georgia,serif;
+  --font-sans:"IBM Plex Sans KR",-apple-system,sans-serif;
+  --font-mono:"JetBrains Mono",ui-monospace,monospace;
+  /* Dark tokens (map area) */
+  --d-bg:#0f1419; --d-panel:#161c24; --d-panel2:#1c242e; --d-line:#27313d;
+  --d-txt:#e7edf3; --d-muted:#8a97a6;
+  --d-accent:#B8482B; --d-accent2:#16c79a;
+  --d-warn:#ffb547; --d-dim:#5a6675; --d-end:#6b7785;
 }
-*{box-sizing:border-box}
-html,body{margin:0;height:100%;font-family:'Pretendard','Apple SD Gothic Neo',-apple-system,'Malgun Gothic',sans-serif;background:var(--bg);color:var(--txt)}
-#app{display:grid;grid-template-columns:320px 1fr;grid-template-rows:56px 1fr;height:100vh}
-header{grid-column:1/3;display:flex;align-items:center;gap:14px;padding:0 18px;background:var(--panel);border-bottom:1px solid var(--line)}
-header h1{font-size:15px;margin:0;font-weight:700;letter-spacing:-.3px}
-header .badge{font-size:11px;color:var(--muted);background:var(--panel2);padding:3px 9px;border-radius:20px;border:1px solid var(--line)}
-header .spacer{flex:1}
-header .kpi{display:flex;gap:18px}
-header .kpi div{font-size:11px;color:var(--muted);text-align:right}
-header .kpi b{display:block;font-size:17px;color:var(--txt);font-weight:700}
-header .kpi b.ac{color:var(--accent)} header .kpi b.gr{color:var(--accent2)}
-aside{background:var(--panel);border-right:1px solid var(--line);overflow-y:auto;padding:16px}
-aside h2{font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin:18px 0 8px}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:var(--bg);color:var(--ink);font-family:var(--font-sans);-webkit-font-smoothing:antialiased}
+body{display:flex;flex-direction:column;overflow:hidden}
+::selection{background:var(--accent);color:var(--bg)}
+
+/* === Top bar (matches other PRUS pages) === */
+.topbar{flex-shrink:0;background:rgba(244,239,230,0.96);backdrop-filter:blur(12px);border-bottom:1px solid var(--rule);z-index:100}
+.topbar-inner{padding:0.9rem 1.4rem;display:flex;align-items:center;justify-content:space-between;gap:1.5rem}
+.brand{display:flex;align-items:baseline;gap:0.6rem;font-family:var(--font-serif);font-weight:600;font-size:1.1rem;letter-spacing:-0.01em}
+a.brand{text-decoration:none;color:inherit}
+.brand .back-arr{font-family:var(--font-mono);font-size:0.95rem;color:var(--muted);margin-right:0.15rem;transition:transform .25s,color .25s;display:inline-block}
+a.brand:hover .back-arr{transform:translateX(-5px);color:var(--accent)}
+a.brand:hover .mark{transform:translateY(1px) scale(1.2)}
+.brand .mark{display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--accent);transform:translateY(1px);transition:transform .25s}
+.brand small{font-family:var(--font-sans);font-weight:400;font-size:0.75rem;color:var(--muted);letter-spacing:0.04em;text-transform:uppercase;margin-left:0.4rem}
+.crumb{font-family:var(--font-mono);font-size:0.7rem;color:var(--accent);letter-spacing:0.14em;text-transform:uppercase;margin-left:0.5rem;padding-left:0.6rem;border-left:1px solid var(--rule)}
+
+.kpi-strip{display:flex;align-items:center;gap:1.6rem}
+.kpi-strip .kpi{display:flex;flex-direction:column;align-items:flex-end;line-height:1.1}
+.kpi-strip .kpi .kl{font-family:var(--font-mono);font-size:0.62rem;color:var(--muted);letter-spacing:0.12em;text-transform:uppercase}
+.kpi-strip .kpi .kv{font-family:var(--font-serif);font-weight:400;font-size:1.4rem;color:var(--ink);font-variation-settings:"opsz" 60;margin-top:2px}
+.kpi-strip .kpi .kv.ac{color:var(--accent)}
+.kpi-strip .kpi .kv.gr{color:var(--accent-2)}
+.kpi-strip .div{width:1px;height:32px;background:var(--rule)}
+
+.badge-live{font-family:var(--font-mono);font-size:0.7rem;color:var(--accent);display:inline-flex;align-items:center;gap:0.4rem;white-space:nowrap}
+.badge-live::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 0 rgba(184,72,43,0.6);animation:pulse 2s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(184,72,43,0.6)}70%{box-shadow:0 0 0 8px rgba(184,72,43,0)}100%{box-shadow:0 0 0 0 rgba(184,72,43,0)}}
+
+.gen-badge{font-family:var(--font-mono);font-size:0.68rem;color:var(--muted);letter-spacing:0.04em;padding-left:0.6rem;border-left:1px solid var(--rule);margin-left:0.2rem;display:none}
+@media (min-width:1100px){.gen-badge{display:inline}}
+
+/* === App grid (sidebar + map) === */
+#app{flex:1;display:grid;grid-template-columns:320px 1fr;overflow:hidden;transition:grid-template-columns .35s cubic-bezier(.2,.7,.3,1)}
+#app.collapsed{grid-template-columns:0 1fr}
+
+/* === Dark sidebar === */
+aside{background:var(--d-panel);border-right:1px solid var(--d-line);overflow-y:auto;padding:18px;color:var(--d-txt);transition:opacity .25s,visibility .25s}
+#app.collapsed aside{opacity:0;visibility:hidden;padding:0;border:none}
+aside h2{font-family:var(--font-mono);font-size:0.66rem;text-transform:uppercase;letter-spacing:0.16em;color:var(--d-muted);margin:18px 0 10px;font-weight:500}
 aside h2:first-child{margin-top:0}
-.field input,.field select{width:100%;background:var(--panel2);border:1px solid var(--line);color:var(--txt);padding:9px 10px;border-radius:8px;font-size:13px;outline:none}
-.field input:focus,.field select:focus{border-color:var(--accent)}
-.field{margin-bottom:10px}
+aside .field input,aside .field select{width:100%;background:var(--d-panel2);border:1px solid var(--d-line);color:var(--d-txt);padding:9px 11px;border-radius:6px;font-size:13px;outline:none;font-family:var(--font-sans)}
+aside .field input:focus,aside .field select:focus{border-color:var(--d-accent)}
+aside .field{margin-bottom:10px}
 .chips{display:flex;flex-wrap:wrap;gap:6px}
-.chip{font-size:12px;padding:5px 10px;border-radius:18px;background:var(--panel2);border:1px solid var(--line);color:var(--muted);cursor:pointer;user-select:none}
-.chip.on{background:var(--accent);border-color:var(--accent);color:#04121f;font-weight:600}
-.chip.s-end.on{background:var(--end);border-color:var(--end)}
-.chip.s-now.on{background:var(--accent2);border-color:var(--accent2)}
-.chip.s-plan.on{background:var(--warn);border-color:var(--warn);color:#2a1c00}
+.chip{font-family:var(--font-mono);font-size:0.72rem;padding:6px 11px;border-radius:20px;background:var(--d-panel2);border:1px solid var(--d-line);color:var(--d-muted);cursor:pointer;user-select:none;transition:background .15s,border-color .15s}
+.chip.on{background:var(--d-accent);border-color:var(--d-accent);color:#fff;font-weight:600}
+.chip.s-end.on{background:var(--d-end);border-color:var(--d-end)}
+.chip.s-now.on{background:var(--d-accent2);border-color:var(--d-accent2);color:#04121f}
+.chip.s-plan.on{background:var(--d-warn);border-color:var(--d-warn);color:#2a1c00}
 .barlist{margin-top:6px}
-.barrow{margin:6px 0;cursor:pointer}
-.barrow .t{display:flex;justify-content:space-between;font-size:12px;margin-bottom:3px}
-.barrow .t span:last-child{color:var(--muted)}
-.bar{height:6px;background:var(--panel2);border-radius:4px;overflow:hidden}
-.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2))}
+.barrow{margin:6px 0;cursor:pointer;transition:transform .15s}
+.barrow:hover{transform:translateX(2px)}
+.barrow .t{display:flex;justify-content:space-between;font-size:12px;margin-bottom:3px;font-family:var(--font-sans)}
+.barrow .t span:last-child{color:var(--d-muted);font-family:var(--font-mono);font-size:11px}
+.bar{height:5px;background:var(--d-panel2);border-radius:3px;overflow:hidden}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--d-accent),var(--d-accent2))}
+.reset{width:100%;margin-top:6px;background:var(--d-panel2);border:1px solid var(--d-line);color:var(--d-muted);padding:9px;border-radius:6px;cursor:pointer;font-size:12px;font-family:var(--font-mono);letter-spacing:0.05em;transition:color .15s,border-color .15s}
+.reset:hover{color:var(--d-txt);border-color:var(--d-accent)}
+.note{font-family:var(--font-mono);font-size:10px;color:var(--d-dim);margin-top:16px;line-height:1.55;letter-spacing:0.02em}
+.note b{color:var(--d-muted)}
+
+/* === Map area === */
+main{position:relative;background:var(--d-bg);overflow:hidden}
 #map{height:100%;width:100%;background:#0f1419}
-main{position:relative}
-.legend{position:absolute;bottom:18px;left:18px;z-index:5;background:rgba(22,28,36,.92);border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-size:12px}
-.legend div{display:flex;align-items:center;gap:7px;margin:3px 0;color:var(--muted)}
+
+/* Sidebar toggle button (floating on map) */
+.sb-toggle{
+  position:absolute;top:14px;left:14px;z-index:30;
+  width:38px;height:38px;
+  background:rgba(22,28,36,0.95);
+  border:1px solid var(--d-line);
+  border-radius:8px;
+  color:var(--d-txt);
+  cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  transition:background .2s,transform .35s cubic-bezier(.2,.7,.3,1);
+  box-shadow:0 4px 12px rgba(0,0,0,0.25);
+}
+.sb-toggle:hover{background:rgba(40,50,60,0.98);border-color:var(--d-accent)}
+.sb-toggle svg{transition:transform .35s cubic-bezier(.2,.7,.3,1);width:18px;height:18px}
+#app.collapsed .sb-toggle svg{transform:rotate(180deg)}
+
+/* Legend */
+.legend{position:absolute;bottom:18px;left:18px;z-index:5;background:rgba(22,28,36,0.92);border:1px solid var(--d-line);border-radius:10px;padding:11px 13px;font-size:12px;backdrop-filter:blur(4px)}
+.legend div{display:flex;align-items:center;gap:8px;margin:4px 0;color:var(--d-muted);font-family:var(--font-mono);font-size:11px;letter-spacing:0.04em}
 .legend .dot{width:10px;height:10px;border-radius:50%}
-.drawer{position:absolute;top:14px;right:14px;width:320px;max-height:calc(100% - 28px);z-index:10;background:rgba(22,28,36,.97);border:1px solid var(--line);border-radius:12px;overflow:hidden;display:none;flex-direction:column;box-shadow:0 12px 40px rgba(0,0,0,.5)}
+
+/* Drawer */
+.drawer{position:absolute;top:14px;right:14px;width:340px;max-height:calc(100% - 28px);z-index:10;background:rgba(22,28,36,0.97);border:1px solid var(--d-line);border-radius:12px;overflow:hidden;display:none;flex-direction:column;box-shadow:0 12px 40px rgba(0,0,0,0.5);backdrop-filter:blur(8px)}
 .drawer.show{display:flex}
-.drawer .dh{padding:14px 16px;border-bottom:1px solid var(--line);background:var(--panel2)}
-.drawer .dh h3{margin:0 0 4px;font-size:15px}
-.drawer .dh .sub{font-size:12px;color:var(--muted)}
-.drawer .db{padding:14px 16px;overflow-y:auto;font-size:13px}
-.drawer .row{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px dashed var(--line)}
-.drawer .row span:first-child{color:var(--muted)}
-.drawer .greet{margin-top:10px;font-size:12px;color:var(--muted);line-height:1.55;background:var(--bg);padding:10px;border-radius:8px;border:1px solid var(--line)}
-.drawer .close{position:absolute;top:10px;right:12px;cursor:pointer;color:var(--muted);font-size:18px;z-index:2}
-.tag{display:inline-block;font-size:11px;padding:2px 8px;border-radius:6px;font-weight:600}
-.tag.end{background:#2a323c;color:#9aa7b5}.tag.now{background:#0f3b32;color:#16c79a}.tag.plan{background:#3b2e10;color:#ffb547}.tag.soon{background:#10283b;color:#3aa0ff}
-.note{font-size:11px;color:var(--dim);margin-top:14px;line-height:1.5}
-.reset{width:100%;margin-top:6px;background:var(--panel2);border:1px solid var(--line);color:var(--muted);padding:8px;border-radius:8px;cursor:pointer;font-size:12px}
-.reset:hover{color:var(--txt);border-color:var(--accent)}
-#keyError{position:absolute;inset:0;z-index:50;display:none;align-items:center;justify-content:center;background:rgba(15,20,25,.96);padding:30px;text-align:center}
+.drawer .dh{padding:16px 18px;border-bottom:1px solid var(--d-line);background:var(--d-panel2)}
+.drawer .dh h3{margin:0 0 4px;font-family:var(--font-serif);font-size:1.15rem;font-weight:500;color:var(--d-txt);letter-spacing:-0.01em;font-variation-settings:"opsz" 36}
+.drawer .dh .sub{font-size:12px;color:var(--d-muted);font-family:var(--font-mono);letter-spacing:0.03em}
+.drawer .db{padding:14px 18px;overflow-y:auto;font-size:13px;color:var(--d-txt)}
+.drawer .row{display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px dashed var(--d-line);gap:0.7rem}
+.drawer .row span:first-child{color:var(--d-muted);font-family:var(--font-mono);font-size:11px;letter-spacing:0.06em;text-transform:uppercase;flex-shrink:0;min-width:60px}
+.drawer .row span:last-child{text-align:right;font-family:var(--font-sans)}
+.drawer .greet{margin-top:12px;font-size:12px;color:var(--d-muted);line-height:1.6;background:var(--d-bg);padding:11px 12px;border-radius:8px;border:1px solid var(--d-line);font-style:italic;font-family:var(--font-serif)}
+.drawer .close{position:absolute;top:10px;right:14px;cursor:pointer;color:var(--d-muted);font-size:22px;z-index:2;line-height:1;transition:color .15s}
+.drawer .close:hover{color:var(--d-accent)}
+.tag{display:inline-block;font-family:var(--font-mono);font-size:10px;padding:3px 9px;border-radius:6px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase}
+.tag.end{background:#2a323c;color:#9aa7b5}
+.tag.now{background:#0f3b32;color:#16c79a}
+.tag.plan{background:#3b2e10;color:#ffb547}
+.tag.soon{background:#10283b;color:#3aa0ff}
+
+/* Kakao key error overlay */
+#keyError{position:absolute;inset:0;z-index:60;display:none;align-items:center;justify-content:center;background:rgba(15,20,25,0.96);padding:30px;text-align:center}
 #keyError.show{display:flex}
-#keyError .box{max-width:520px;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:26px 28px;font-size:13px;line-height:1.7;color:var(--muted)}
-#keyError h3{color:var(--txt);margin:0 0 12px;font-size:16px}
-#keyError code{background:var(--panel2);padding:2px 6px;border-radius:5px;color:var(--accent2);font-size:12px}
-#keyError ol{text-align:left;padding-left:20px}
+#keyError .box{max-width:560px;background:var(--d-panel);border:1px solid var(--d-line);border-radius:14px;padding:28px 32px;font-size:13px;line-height:1.7;color:var(--d-muted);text-align:left}
+#keyError h3{color:var(--d-txt);font-family:var(--font-serif);font-weight:500;margin:0 0 14px;font-size:1.2rem}
+#keyError code{background:var(--d-panel2);padding:2px 7px;border-radius:5px;color:var(--d-accent2);font-size:12px;font-family:var(--font-mono)}
+#keyError ol{padding-left:20px;margin:8px 0 12px}
+#keyError li{margin:6px 0}
+#keyError a{color:var(--d-accent2)}
+
+@media (max-width:900px){
+  #app{grid-template-columns:280px 1fr}
+  .kpi-strip{gap:0.9rem}
+  .kpi-strip .kpi .kv{font-size:1.1rem}
+  .gen-badge{display:none}
+}
+@media (max-width:700px){
+  #app{grid-template-columns:0 1fr}
+  #app.expanded{grid-template-columns:280px 1fr}
+  aside{position:absolute;height:100%;width:280px;z-index:40;box-shadow:8px 0 24px rgba(0,0,0,0.4)}
+}
 </style>
 </head>
 <body>
-<div id="app">
-  <header>
-    <h1>피알어스 · 분양현장 지도 대시보드</h1>
-    <span class="badge" id="genBadge"></span>
-    <div class="spacer"></div>
-    <div class="kpi">
-      <div>표시 현장<b class="ac" id="kVisible">0</b></div>
-      <div>진행/예정<b class="gr" id="kActive">0</b></div>
-      <div>총 세대<b id="kUnits">0</b></div>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="../../index.html" title="포털 인덱스로 돌아가기">
+      <span class="back-arr">←</span>
+      <span class="mark"></span>
+      PRUS Insight
+      <small>Pre-Sale Sites Map</small>
+      <span class="crumb">Map</span>
+      <span class="gen-badge" id="genBadge"></span>
+    </a>
+    <div class="kpi-strip">
+      <div class="kpi"><div class="kl">표시 현장</div><div class="kv ac" id="kVisible">0</div></div>
+      <div class="div"></div>
+      <div class="kpi"><div class="kl">진행/예정</div><div class="kv gr" id="kActive">0</div></div>
+      <div class="div"></div>
+      <div class="kpi"><div class="kl">총 세대</div><div class="kv" id="kUnits">0</div></div>
     </div>
-  </header>
+    <span class="badge-live">LIVE · 2026 Q2</span>
+  </div>
+</header>
+
+<div id="app">
   <aside>
     <h2>검색</h2>
     <div class="field"><input id="q" placeholder="현장명 · 브랜드 · 시공사"/></div>
@@ -94,7 +190,7 @@ main{position:relative}
     <div class="field"><select id="sido"><option value="">전체</option></select></div>
     <h2>분양 시작연도</h2>
     <div class="field"><select id="year"><option value="">전체 연도</option></select></div>
-    <button class="reset" id="resetBtn">필터 초기화</button>
+    <button class="reset" id="resetBtn">FILTER RESET</button>
     <h2>지역 분포 (상위)</h2>
     <div class="barlist" id="regionBars"></div>
     <h2>브랜드 분포 (상위)</h2>
@@ -102,6 +198,9 @@ main{position:relative}
     <div class="note" id="note"></div>
   </aside>
   <main>
+    <button class="sb-toggle" id="sbToggle" title="사이드바 열기/닫기" aria-label="Toggle sidebar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+    </button>
     <div id="map"></div>
     <div class="legend">
       <div><span class="dot" style="background:#16c79a"></span>진행중</div>
@@ -117,7 +216,7 @@ main{position:relative}
     <div id="keyError"><div class="box">
       <h3>카카오맵 앱키 설정이 필요합니다</h3>
       <ol>
-        <li><a href="https://developers.kakao.com" target="_blank" style="color:var(--accent)">developers.kakao.com</a> 에서 앱 생성 후 <b>JavaScript 키</b> 발급</li>
+        <li><a href="https://developers.kakao.com" target="_blank">developers.kakao.com</a> 에서 앱 생성 후 <b>JavaScript 키</b> 발급</li>
         <li>내 애플리케이션 → 플랫폼 → <b>Web</b>에 서빙 도메인 등록 (예: <code>http://localhost:8000</code>)</li>
         <li>이 파일 상단 <code>const KAKAO_KEY = "..."</code> 에 발급받은 키 입력</li>
         <li>폴더에서 <code>python -m http.server 8000</code> 실행 후 <code>http://localhost:8000</code> 접속</li>
@@ -126,20 +225,34 @@ main{position:relative}
     </div></div>
   </main>
 </div>
+
 <script src="sites.js"></script>
 <script>
-// ===== 카카오 JavaScript 앱키를 입력하세요 =====
 const KAKAO_KEY = "773e0dc34c6a83d35207e3aa78f8e91e";
-// ============================================
 
 const DATA=window.SITE_DATA;
 const SITES=DATA.sites.filter(s=>!s.hidden);
 const COLOR={"진행중":"#16c79a","예정":"#ffb547","진행예정":"#3aa0ff","종료":"#6b7785"};
 const TAGCLS={"진행중":"now","예정":"plan","진행예정":"soon","종료":"end"};
-document.getElementById('genBadge').textContent='생성 '+DATA.generated+' · 원본 '+DATA.total.toLocaleString()+'건';
+document.getElementById('genBadge').textContent='gen '+DATA.generated+' · '+DATA.total.toLocaleString()+'건';
 
 let map,clusterer,markerImg={};
 const state={q:"",sido:"",year:"",status:new Set(["진행중","예정","진행예정","종료"])};
+
+// === Sidebar toggle ===
+const appEl=document.getElementById('app');
+const SB_KEY='prus_map_sidebar';
+function applySidebar(){
+  const collapsed=localStorage.getItem(SB_KEY)==='collapsed';
+  appEl.classList.toggle('collapsed',collapsed);
+  setTimeout(()=>{if(map&&kakao&&kakao.maps)map.relayout();},380);
+}
+document.getElementById('sbToggle').addEventListener('click',()=>{
+  const now=appEl.classList.toggle('collapsed');
+  localStorage.setItem(SB_KEY,now?'collapsed':'expanded');
+  setTimeout(()=>{if(map&&kakao&&kakao.maps)map.relayout();},380);
+});
+applySidebar();
 
 function loadKakao(){
   if(!KAKAO_KEY||KAKAO_KEY==="YOUR_KAKAO_JAVASCRIPT_KEY"){
@@ -164,8 +277,8 @@ function initMap(){
   map.addControl(new kakao.maps.ZoomControl(),kakao.maps.ControlPosition.RIGHT);
   for(const k in COLOR)markerImg[k]=makeImg(COLOR[k]);
   clusterer=new kakao.maps.MarkerClusterer({map,averageCenter:true,minLevel:6,gridSize:60,
-    styles:[{width:'40px',height:'40px',background:'rgba(58,160,255,.85)',color:'#04121f',
-      textAlign:'center',lineHeight:'40px',borderRadius:'20px',fontWeight:'700',fontSize:'13px'}]});
+    styles:[{width:'40px',height:'40px',background:'rgba(184,72,43,.88)',color:'#fff',
+      textAlign:'center',lineHeight:'40px',borderRadius:'20px',fontWeight:'700',fontSize:'13px',border:'1px solid rgba(255,255,255,0.2)'}]});
   buildControls(); render();
 }
 
@@ -222,7 +335,7 @@ function openDrawer(s){
   let h="";
   for(const[k,v]of rows){if(v)h+=`<div class="row"><span>${k}</span><span>${v}</span></div>`;}
   if(s.greeting)h+=`<div class="greet">${s.greeting}</div>`;
-  h+=`<div class="note">좌표 정밀도: ${({alias:'신도시/지구',gu:'자치구',sigungu:'시·군·구',sido:'시·도(개략)'})[s.geolevel]||s.geolevel} 단위 (기준: ${s.matched})</div>`;
+  h+=`<div style="font-family:var(--font-mono);font-size:10px;color:var(--d-dim);margin-top:14px;line-height:1.5;letter-spacing:0.04em">좌표 정밀도: ${({alias:'신도시/지구',gu:'자치구',sigungu:'시·군·구',sido:'시·도(개략)'})[s.geolevel]||s.geolevel} 단위 (기준: ${s.matched})</div>`;
   document.getElementById('dBody').innerHTML=h;
   document.getElementById('drawer').classList.add('show');
   if(map)map.panTo(new kakao.maps.LatLng(s.lat,s.lng));
@@ -248,7 +361,7 @@ function buildControls(){
     document.querySelectorAll('#statusChips .chip').forEach(c=>c.classList.add('on'));render();
   };
   document.getElementById('note').innerHTML=
-    `· 숨김 처리 제외 후 <b>${SITES.length.toLocaleString()}</b>개 현장 표시<br>`+
+    `· 숨김 제외 후 <b>${SITES.length.toLocaleString()}</b>개 현장 표시<br>`+
     `· 좌표는 행정구역 중심 기반 <b>근사값</b> (프로토타입). 정밀 핀은 카카오 로컬 API 지오코딩 연동 시 가능.`;
 }
 loadKakao();
