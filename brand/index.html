@@ -3,366 +3,158 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>PRUS INSIGHT — 분양 시장 인텔리전스</title>
+<title>PRUS Insight — Brand Intelligence</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT,WONK@9..144,300..900,0..100,0..1&family=Noto+Serif+KR:wght@300;400;600;700;900&family=IBM+Plex+Sans+KR:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <script src="../auth.js"></script>
 <style>
-  :root{
-    --bg:#F4EFE6;
-    --bg-alt:#EBE4D6;
-    --bg-deep:#1C1B17;
-    --ink:#1C1B17;
-    --ink-2:#3D3A33;
-    --muted:#857F70;
-    --rule:#D6CFBE;
-    --rule-2:#BFB8A4;
-    --accent:#B8482B;
-    --accent-2:#2A4F4B;
-    --gold:#A2873D;
-    --grid: 1.5rem;
-    --font-serif: "Fraunces", "Noto Serif KR", Georgia, serif;
-    --font-sans: "IBM Plex Sans KR", -apple-system, BlinkMacSystemFont, sans-serif;
-    --font-mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
-  }
+  :root{--bg:#F4EFE6;--bg-alt:#EBE4D6;--ink:#1C1B17;--ink-2:#3D3A33;--muted:#857F70;--rule:#D6CFBE;--rule-2:#BFB8A4;--accent:#B8482B;--accent-2:#2A4F4B;--gold:#A2873D;--font-serif:"Fraunces","Noto Serif KR",Georgia,serif;--font-sans:"IBM Plex Sans KR",-apple-system,sans-serif;--font-mono:"JetBrains Mono",ui-monospace,monospace}
   *{box-sizing:border-box;margin:0;padding:0}
-  html,body{background:var(--bg);color:var(--ink);font-family:var(--font-sans);font-weight:400;-webkit-font-smoothing:antialiased;line-height:1.5}
-  body{
-    background-image:
-      radial-gradient(ellipse at 12% -10%, rgba(184,72,43,0.07), transparent 45%),
-      radial-gradient(ellipse at 88% 110%, rgba(42,79,75,0.06), transparent 55%);
-    min-height:100vh;
-    padding-bottom:6rem;
-  }
+  html,body{background:var(--bg);color:var(--ink);font-family:var(--font-sans);line-height:1.5}
+  body{background-image:radial-gradient(ellipse at 12% -10%,rgba(184,72,43,0.07),transparent 45%),radial-gradient(ellipse at 88% 110%,rgba(42,79,75,0.06),transparent 55%);min-height:100vh;padding-bottom:6rem}
   ::selection{background:var(--accent);color:var(--bg)}
 
-  /* Top bar */
-  .topbar{
-    position:sticky;top:0;z-index:50;
-    background:rgba(244,239,230,0.92);
-    backdrop-filter:blur(12px);
-    border-bottom:1px solid var(--rule);
-  }
-  .topbar-inner{
-    max-width:1320px;margin:0 auto;
-    padding:0.9rem 2rem;
-    display:flex;align-items:center;justify-content:space-between;gap:2rem;
-  }
-  .brand{
-    display:flex;align-items:baseline;gap:0.6rem;
-    font-family:var(--font-serif);font-weight:600;font-size:1.15rem;letter-spacing:-0.01em;
-  }
-  .brand .mark{
-    display:inline-block;width:10px;height:10px;border-radius:50%;
-    background:var(--accent);transform:translateY(1px);
-  }
-  .brand small{
-    font-family:var(--font-sans);font-weight:400;font-size:0.78rem;
-    color:var(--muted);letter-spacing:0.04em;text-transform:uppercase;margin-left:0.4rem;
-  }
+  .topbar{position:sticky;top:0;z-index:50;background:rgba(244,239,230,0.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--rule)}
+  .topbar-inner{max-width:1320px;margin:0 auto;padding:0.9rem 2rem;display:flex;align-items:center;justify-content:space-between;gap:2rem}
+  .brand{display:flex;align-items:baseline;gap:0.6rem;font-family:var(--font-serif);font-weight:600;font-size:1.15rem;letter-spacing:-0.01em}
   a.brand{text-decoration:none;color:inherit}
-  .brand .back-arr{
-    font-family:var(--font-mono);font-size:0.95rem;color:var(--muted);
-    margin-right:0.15rem;transition:transform .25s ease, color .25s ease;
-    display:inline-block;
-  }
+  .brand .back-arr{font-family:var(--font-mono);font-size:0.95rem;color:var(--muted);margin-right:0.15rem;transition:transform .25s,color .25s;display:inline-block}
   a.brand:hover .back-arr{transform:translateX(-5px);color:var(--accent)}
   a.brand:hover .mark{transform:translateY(1px) scale(1.2)}
-  .brand .mark{transition:transform .25s ease}
-  .crumb{
-    font-family:var(--font-mono);font-size:0.7rem;color:var(--accent);
-    letter-spacing:0.14em;text-transform:uppercase;margin-left:0.6rem;
-    padding-left:0.6rem;border-left:1px solid var(--rule);
-  }
-  .nav{display:flex;gap:1.6rem;font-size:0.8rem;color:var(--ink-2);letter-spacing:0.02em}
+  .brand .mark{display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--accent);transform:translateY(1px);transition:transform .25s}
+  .brand small{font-family:var(--font-sans);font-weight:400;font-size:0.78rem;color:var(--muted);letter-spacing:0.04em;text-transform:uppercase;margin-left:0.4rem}
+  .crumb{font-family:var(--font-mono);font-size:0.7rem;color:var(--accent);letter-spacing:0.14em;text-transform:uppercase;margin-left:0.6rem;padding-left:0.6rem;border-left:1px solid var(--rule)}
+  .nav{display:flex;gap:1.4rem;font-size:0.8rem;color:var(--ink-2);letter-spacing:0.02em}
   .nav a{color:inherit;text-decoration:none;border-bottom:1px solid transparent;padding-bottom:2px;transition:border-color .15s}
   .nav a:hover{border-bottom-color:var(--accent)}
-  .badge-live{
-    font-family:var(--font-mono);font-size:0.7rem;color:var(--accent);
-    display:inline-flex;align-items:center;gap:0.4rem;
-  }
-  .badge-live::before{
-    content:"";width:6px;height:6px;border-radius:50%;background:var(--accent);
-    box-shadow:0 0 0 0 rgba(184,72,43,0.6);animation:pulse 2s infinite;
-  }
-  @keyframes pulse{
-    0%{box-shadow:0 0 0 0 rgba(184,72,43,0.6)}
-    70%{box-shadow:0 0 0 8px rgba(184,72,43,0)}
-    100%{box-shadow:0 0 0 0 rgba(184,72,43,0)}
-  }
+  .badge-live{font-family:var(--font-mono);font-size:0.7rem;color:var(--accent);display:inline-flex;align-items:center;gap:0.4rem}
+  .badge-live::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 0 rgba(184,72,43,0.6);animation:pulse 2s infinite}
+  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(184,72,43,0.6)}70%{box-shadow:0 0 0 8px rgba(184,72,43,0)}100%{box-shadow:0 0 0 0 rgba(184,72,43,0)}}
 
-  /* Layout */
   main{max-width:1320px;margin:0 auto;padding:0 2rem}
 
-  /* Masthead */
-  .masthead{
-    padding:5rem 0 3.5rem;
-    border-bottom:1px solid var(--rule);
-    display:grid;grid-template-columns:1.4fr 1fr;gap:4rem;align-items:end;
-  }
-  .masthead .eyebrow{
-    font-family:var(--font-mono);font-size:0.72rem;color:var(--accent);
-    letter-spacing:0.22em;text-transform:uppercase;margin-bottom:1.25rem;
-  }
-  .masthead h1{
-    font-family:var(--font-serif);font-weight:300;
-    font-size:clamp(3rem, 6.4vw, 5.6rem);
-    line-height:0.96;letter-spacing:-0.035em;
-    font-variation-settings:"opsz" 144, "SOFT" 30;
-  }
-  .masthead h1 em{
-    font-style:italic;font-weight:400;color:var(--accent);
-    font-variation-settings:"opsz" 144, "SOFT" 100, "WONK" 1;
-  }
-  .masthead .kicker{
-    font-family:var(--font-serif);font-weight:400;font-size:1.1rem;
-    color:var(--ink-2);margin-top:1.5rem;max-width:36ch;line-height:1.5;
-    font-style:italic;
-  }
-  .masthead .right{
-    border-left:1px solid var(--rule);padding-left:3rem;
-  }
+  .masthead{padding:5rem 0 3.5rem;border-bottom:1px solid var(--rule);display:grid;grid-template-columns:1.4fr 1fr;gap:4rem;align-items:end}
+  .masthead .eyebrow{font-family:var(--font-mono);font-size:0.72rem;color:var(--accent);letter-spacing:0.22em;text-transform:uppercase;margin-bottom:1.25rem}
+  .masthead h1{font-family:var(--font-serif);font-weight:300;font-size:clamp(3rem,6.4vw,5.6rem);line-height:0.96;letter-spacing:-0.035em;font-variation-settings:"opsz" 144,"SOFT" 30}
+  .masthead h1 em{font-style:italic;font-weight:400;color:var(--accent);font-variation-settings:"opsz" 144,"SOFT" 100,"WONK" 1}
+  .masthead .kicker{font-family:var(--font-serif);font-weight:400;font-size:1.1rem;color:var(--ink-2);margin-top:1.5rem;max-width:36ch;line-height:1.5;font-style:italic}
+  .masthead .right{border-left:1px solid var(--rule);padding-left:3rem}
   .meta-list{display:flex;flex-direction:column;gap:0.9rem}
-  .meta-list dt{
-    font-family:var(--font-mono);font-size:0.7rem;color:var(--muted);
-    letter-spacing:0.12em;text-transform:uppercase;
-  }
-  .meta-list dd{
-    font-family:var(--font-serif);font-weight:400;font-size:1.05rem;color:var(--ink);
-    margin-top:0.15rem;
-  }
+  .meta-list dt{font-family:var(--font-mono);font-size:0.7rem;color:var(--muted);letter-spacing:0.12em;text-transform:uppercase}
+  .meta-list dd{font-family:var(--font-serif);font-weight:400;font-size:1.05rem;color:var(--ink);margin-top:0.15rem}
 
-  /* Hero stats */
-  .stats-strip{
-    display:grid;grid-template-columns:repeat(4,1fr);
-    padding:2.5rem 0;border-bottom:1px solid var(--rule);
-  }
-  .stat{
-    padding:0 2rem;
-    border-right:1px solid var(--rule);
-  }
+  .stats-strip{display:grid;grid-template-columns:repeat(4,1fr);padding:2.5rem 0;border-bottom:1px solid var(--rule)}
+  .stat{padding:0 2rem;border-right:1px solid var(--rule)}
   .stat:last-child{border-right:none}
   .stat:first-child{padding-left:0}
-  .stat .label{
-    font-family:var(--font-mono);font-size:0.7rem;color:var(--muted);
-    letter-spacing:0.12em;text-transform:uppercase;margin-bottom:0.8rem;
-  }
-  .stat .value{
-    font-family:var(--font-serif);font-weight:400;
-    font-size:clamp(2.2rem, 3.8vw, 3.4rem);line-height:1;letter-spacing:-0.02em;
-    color:var(--ink);
-    font-variation-settings:"opsz" 144;
-  }
-  .stat .unit{
-    font-family:var(--font-sans);font-weight:400;font-size:0.95rem;color:var(--muted);
-    margin-left:0.3rem;
-  }
-  .stat .delta{
-    font-family:var(--font-mono);font-size:0.78rem;color:var(--accent-2);
-    margin-top:0.6rem;
-  }
+  .stat .label{font-family:var(--font-mono);font-size:0.7rem;color:var(--muted);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:0.8rem}
+  .stat .value{font-family:var(--font-serif);font-weight:400;font-size:clamp(2.2rem,3.8vw,3.4rem);line-height:1;letter-spacing:-0.02em;color:var(--ink);font-variation-settings:"opsz" 144}
+  .stat .unit{font-family:var(--font-sans);font-weight:400;font-size:0.95rem;color:var(--muted);margin-left:0.3rem}
+  .stat .delta{font-family:var(--font-mono);font-size:0.78rem;color:var(--accent-2);margin-top:0.6rem}
 
-  /* Section title */
   .section{padding:4rem 0;border-bottom:1px solid var(--rule)}
   .section-head{display:grid;grid-template-columns:auto 1fr auto;gap:2rem;align-items:end;margin-bottom:2.5rem}
-  .section-head .num{
-    font-family:var(--font-mono);font-size:0.78rem;color:var(--accent);letter-spacing:0.12em;
-  }
-  .section-head h2{
-    font-family:var(--font-serif);font-weight:400;
-    font-size:clamp(1.6rem, 2.6vw, 2.4rem);
-    letter-spacing:-0.02em;line-height:1.1;
-    font-variation-settings:"opsz" 60;
-  }
+  .section-head .num{font-family:var(--font-mono);font-size:0.78rem;color:var(--accent);letter-spacing:0.12em}
+  .section-head h2{font-family:var(--font-serif);font-weight:400;font-size:clamp(1.6rem,2.6vw,2.4rem);letter-spacing:-0.02em;line-height:1.1;font-variation-settings:"opsz" 60}
   .section-head h2 em{font-style:italic;color:var(--accent);font-weight:400}
-  .section-head .lede{
-    font-family:var(--font-serif);font-style:italic;color:var(--ink-2);
-    font-size:0.95rem;max-width:38ch;text-align:right;line-height:1.4;
-  }
+  .section-head .lede{font-family:var(--font-serif);font-style:italic;color:var(--ink-2);font-size:0.95rem;max-width:38ch;text-align:right;line-height:1.4}
 
-  /* Brand leaderboard */
-  .leaderboard{
-    border-top:1px solid var(--rule-2);
-  }
-  .lb-row{
-    display:grid;
-    grid-template-columns: 36px 1.4fr 0.9fr 90px 1.2fr 90px 80px;
-    align-items:center;
-    padding:1rem 0;
-    border-bottom:1px solid var(--rule);
-    transition:background 0.15s;
-  }
-  .lb-row.head{
-    border-bottom:1px solid var(--rule-2);
-    padding:0.7rem 0;
-    font-family:var(--font-mono);font-size:0.7rem;color:var(--muted);
-    letter-spacing:0.12em;text-transform:uppercase;
-  }
+  /* Leaderboard */
+  .leaderboard{border-top:1px solid var(--rule-2)}
+  .lb-row{display:grid;grid-template-columns:36px 1.4fr 0.9fr 90px 1.2fr 90px 80px;align-items:center;padding:1rem 0;border-bottom:1px solid var(--rule);transition:background .15s}
+  .lb-row.head{border-bottom:1px solid var(--rule-2);padding:0.7rem 0;font-family:var(--font-mono);font-size:0.7rem;color:var(--muted);letter-spacing:0.12em;text-transform:uppercase}
   .lb-row:not(.head):hover{background:rgba(184,72,43,0.04)}
-  .lb-rank{
-    font-family:var(--font-mono);color:var(--muted);font-size:0.85rem;
-  }
-  .lb-brand{
-    font-family:var(--font-serif);font-size:1.2rem;font-weight:400;
-    letter-spacing:-0.01em;
-  }
-  .lb-builder{
-    font-size:0.85rem;color:var(--ink-2);
-  }
-  .lb-num{
-    font-family:var(--font-mono);font-size:0.9rem;text-align:right;
-  }
-  .lb-num-big{
-    font-family:var(--font-serif);font-size:1.4rem;font-weight:400;
-    text-align:right;font-variation-settings:"opsz" 60;
-  }
+  .lb-rank{font-family:var(--font-mono);color:var(--muted);font-size:0.85rem}
+  .lb-brand{font-family:var(--font-serif);font-size:1.2rem;font-weight:400;letter-spacing:-0.01em}
+  .lb-builder{font-size:0.85rem;color:var(--ink-2)}
+  .lb-num{font-family:var(--font-mono);font-size:0.9rem;text-align:right}
+  .lb-num-big{font-family:var(--font-serif);font-size:1.4rem;font-weight:400;text-align:right;font-variation-settings:"opsz" 60}
   .lb-num-big.hi{color:var(--accent)}
   .lb-num-big.lo{color:var(--muted)}
-  .rating-bar{
-    display:flex;height:8px;overflow:hidden;border-radius:1px;
-    background:var(--rule);
-  }
-  .rating-bar > span{display:block;height:100%}
+  .rating-bar{display:flex;height:8px;overflow:hidden;background:var(--rule)}
+  .rating-bar>span{display:block;height:100%}
   .rating-bar .r4{background:var(--accent-2)}
   .rating-bar .r3{background:var(--gold)}
   .rating-bar .r2{background:#D08B6E}
   .rating-bar .r1{background:var(--accent)}
-  .star-marker{
-    display:inline-block;font-family:var(--font-mono);font-size:0.7rem;
-    color:var(--muted);margin-left:0.5rem;
-  }
-
-  /* Tabs */
+  .star-marker{display:inline-block;font-family:var(--font-mono);font-size:0.7rem;color:var(--muted);margin-left:0.5rem}
   .tabs{display:flex;gap:1.5rem;justify-self:end}
-  .tab-btn{
-    font-family:var(--font-mono);font-size:0.74rem;letter-spacing:0.1em;text-transform:uppercase;
-    color:var(--muted);background:none;border:none;cursor:pointer;
-    padding:0.4rem 0;border-bottom:1px solid transparent;
-  }
+  .tab-btn{font-family:var(--font-mono);font-size:0.74rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);background:none;border:none;cursor:pointer;padding:0.4rem 0;border-bottom:1px solid transparent}
   .tab-btn.active{color:var(--ink);border-bottom-color:var(--accent)}
 
-  /* Small multiples */
+  /* Small multiples (trajectory) */
   .smalls{display:grid;grid-template-columns:repeat(5,1fr);gap:1.5rem}
-  .small{
-    border:1px solid var(--rule);
-    padding:1.3rem 1.2rem 1rem;
-    background:rgba(255,253,247,0.4);
-    position:relative;
-  }
-  .small h4{
-    font-family:var(--font-serif);font-weight:400;font-size:1.05rem;
-    letter-spacing:-0.01em;margin-bottom:0.1rem;
-    font-variation-settings:"opsz" 36;
-  }
+  .small{border:1px solid var(--rule);padding:1.3rem 1.2rem 1rem;background:rgba(255,253,247,0.4)}
+  .small h4{font-family:var(--font-serif);font-weight:400;font-size:1.05rem;font-variation-settings:"opsz" 36}
   .small .sub{font-family:var(--font-mono);font-size:0.68rem;color:var(--muted);letter-spacing:0.08em}
   .small svg{display:block;width:100%;height:80px;margin:0.8rem 0 0.6rem}
-  .small .foot{
-    display:flex;justify-content:space-between;align-items:baseline;
-    font-family:var(--font-mono);font-size:0.7rem;color:var(--muted);
-  }
-  .small .foot .now{
-    font-family:var(--font-serif);font-size:1.15rem;color:var(--accent);
-  }
+  .small .foot{display:flex;justify-content:space-between;align-items:baseline;font-family:var(--font-mono);font-size:0.7rem;color:var(--muted)}
+  .small .foot .now{font-family:var(--font-serif);font-size:1.15rem;color:var(--accent)}
 
-  /* Momentum chart */
-  .momentum{
-    display:grid;grid-template-columns:1fr 280px;gap:3rem;align-items:start;
-  }
-  .momentum-chart{
-    border:1px solid var(--rule);
-    padding:2rem 1.5rem 1rem;
-    background:rgba(255,253,247,0.3);
-  }
-  .momentum svg{display:block;width:100%;height:340px}
-  .legend{display:flex;gap:1.5rem;margin-top:0.5rem;justify-content:flex-end;font-family:var(--font-mono);font-size:0.72rem;color:var(--muted)}
-  .legend span{display:inline-flex;align-items:center;gap:0.4rem}
-  .legend i{display:inline-block;width:18px;height:2px}
-  .annotations{display:flex;flex-direction:column;gap:1.4rem}
-  .annot{padding-left:1rem;border-left:2px solid var(--accent)}
-  .annot .date{font-family:var(--font-mono);font-size:0.7rem;color:var(--accent);letter-spacing:0.1em}
-  .annot .body{font-family:var(--font-serif);font-size:0.98rem;margin-top:0.3rem;line-height:1.4;color:var(--ink)}
-  .annot .body strong{font-weight:600}
+  /* DNA Cards */
+  .dna-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:1rem}
+  .dna{border:1px solid var(--rule);background:rgba(255,253,247,0.5);padding:1.4rem 1.2rem;display:flex;flex-direction:column}
+  .dna h4{font-family:var(--font-serif);font-weight:400;font-size:1.2rem;font-variation-settings:"opsz" 48;line-height:1.15}
+  .dna .builder{font-family:var(--font-mono);font-size:0.65rem;color:var(--muted);letter-spacing:0.08em;margin-top:0.2rem;text-transform:uppercase}
+  .dna .metric{margin-top:1rem;position:relative}
+  .dna .metric .mlbl{font-family:var(--font-mono);font-size:0.6rem;color:var(--muted);letter-spacing:0.12em;text-transform:uppercase;display:flex;justify-content:space-between}
+  .dna .metric .mlbl em{color:var(--ink-2);font-style:normal}
+  .dna .metric .mval{font-family:var(--font-serif);font-size:1.55rem;font-variation-settings:"opsz" 60;line-height:1;margin-top:0.3rem;color:var(--ink)}
+  .dna .metric .mval small{font-size:0.65rem;color:var(--muted);font-family:var(--font-mono);margin-left:0.25rem}
+  .dna .metric .bar{height:5px;background:var(--rule);margin-top:0.45rem;position:relative;overflow:hidden}
+  .dna .metric .bar>span{position:absolute;left:0;top:0;height:100%;background:var(--accent-2)}
+  .dna .metric.hi .bar>span{background:var(--accent)}
+  .dna .metric .avg{position:absolute;top:0;height:11px;width:1px;background:var(--ink);opacity:0.45;margin-top:0.45rem}
+  .dna .tagline{margin-top:auto;padding-top:1rem;border-top:1px dashed var(--rule);font-family:var(--font-serif);font-style:italic;font-size:0.82rem;color:var(--ink-2);line-height:1.4;min-height:3em}
+  .dna .tagline strong{color:var(--accent);font-style:normal;font-weight:600}
 
-  /* Regions */
-  .regions{display:grid;grid-template-columns:1fr;gap:0;border-top:1px solid var(--rule-2)}
-  .region-row{
-    display:grid;grid-template-columns:200px 1fr 90px 110px;gap:1.5rem;
-    align-items:center;padding:0.7rem 0;border-bottom:1px solid var(--rule);
-  }
-  .region-row .name{font-family:var(--font-serif);font-size:1.05rem}
-  .region-row .bar-wrap{position:relative;height:18px;background:var(--rule);overflow:hidden}
-  .region-row .bar-wrap > span{position:absolute;left:0;top:0;height:100%;background:var(--accent-2)}
-  .region-row .n{font-family:var(--font-mono);font-size:0.85rem;text-align:right;color:var(--ink-2)}
-  .region-row .r{font-family:var(--font-serif);font-size:1.1rem;text-align:right}
+  /* Brand x Region heatmap */
+  .br-heat{display:grid;gap:3px;background:transparent}
+  .br-heat .h-row{display:grid;grid-template-columns:120px repeat(13,1fr);gap:3px;align-items:center}
+  .br-heat .h-cell{aspect-ratio:auto;min-height:34px;display:flex;align-items:center;justify-content:center;font-family:var(--font-mono);font-size:0.62rem;color:rgba(255,255,255,0.95);text-shadow:0 1px 1px rgba(0,0,0,0.18);position:relative}
+  .br-heat .h-cell.head{background:transparent !important;color:var(--muted);font-size:0.7rem;letter-spacing:0.04em;text-shadow:none;padding:0.4rem 0}
+  .br-heat .h-cell.row-head{font-family:var(--font-serif);font-size:1rem;color:var(--ink);background:transparent !important;text-shadow:none;justify-content:flex-end;padding-right:0.6rem}
+  .br-heat .h-cell.peak{outline:2px solid var(--accent);outline-offset:-1px;z-index:2}
 
-  /* Questions catalog */
-  .questions{
-    display:grid;grid-template-columns:repeat(2,1fr);gap:1px;
-    background:var(--rule);border:1px solid var(--rule);
-  }
-  .q{
-    background:var(--bg);padding:1.2rem 1.4rem;
-    display:flex;justify-content:space-between;align-items:flex-start;gap:1rem;
-  }
-  .q .text{font-family:var(--font-serif);font-size:0.98rem;line-height:1.4}
-  .q .count{
-    font-family:var(--font-mono);font-size:0.8rem;color:var(--accent);
-    white-space:nowrap;
-  }
+  /* Top brand per region */
+  .top-region{border-top:1px solid var(--rule-2)}
+  .tr-row{display:grid;grid-template-columns:120px 1fr 1fr 1fr;gap:1.5rem;align-items:center;padding:1rem 0;border-bottom:1px solid var(--rule)}
+  .tr-row.head{font-family:var(--font-mono);font-size:0.7rem;color:var(--muted);letter-spacing:0.12em;text-transform:uppercase;padding:0.7rem 0;border-bottom:1px solid var(--rule-2)}
+  .tr-row .sido{font-family:var(--font-serif);font-size:1.25rem;font-variation-settings:"opsz" 48}
+  .tr-cell{display:flex;align-items:baseline;gap:0.5rem;padding:0.4rem 0.7rem;background:rgba(255,253,247,0.55);border-left:2px solid transparent}
+  .tr-cell.r1{border-left-color:var(--accent)}
+  .tr-cell.r2{border-left-color:var(--accent-2)}
+  .tr-cell.r3{border-left-color:var(--rule-2)}
+  .tr-cell .bn{font-family:var(--font-serif);font-size:1rem;flex:1}
+  .tr-cell .nv{font-family:var(--font-mono);font-size:0.78rem;color:var(--ink-2)}
 
   /* Use cases */
   .usecases{display:grid;grid-template-columns:repeat(3,1fr);gap:2rem}
-  .uc{
-    padding:2rem 1.8rem;border:1px solid var(--rule);
-    background:rgba(255,253,247,0.4);position:relative;
-    transition:transform .2s,border-color .2s;
-  }
+  .uc{padding:2rem 1.8rem;border:1px solid var(--rule);background:rgba(255,253,247,0.4);position:relative;transition:transform .2s,border-color .2s}
   .uc:hover{transform:translateY(-3px);border-color:var(--accent)}
-  .uc .tag{
-    font-family:var(--font-mono);font-size:0.7rem;color:var(--accent);
-    letter-spacing:0.12em;text-transform:uppercase;
-  }
-  .uc h3{
-    font-family:var(--font-serif);font-weight:400;font-size:1.5rem;
-    letter-spacing:-0.015em;margin:0.7rem 0 0.6rem;line-height:1.15;
-  }
+  .uc .tag{font-family:var(--font-mono);font-size:0.7rem;color:var(--accent);letter-spacing:0.12em;text-transform:uppercase}
+  .uc h3{font-family:var(--font-serif);font-weight:400;font-size:1.5rem;letter-spacing:-0.015em;margin:0.7rem 0 0.6rem;line-height:1.15}
   .uc h3 em{font-style:italic;color:var(--accent);font-weight:400}
   .uc p{color:var(--ink-2);font-size:0.92rem;line-height:1.55}
-  .uc .price{
-    position:absolute;bottom:1.5rem;right:1.5rem;
-    font-family:var(--font-mono);font-size:0.75rem;color:var(--muted);
-  }
+  .uc .price{position:absolute;bottom:1.5rem;right:1.5rem;font-family:var(--font-mono);font-size:0.75rem;color:var(--muted)}
 
-  /* Footer */
-  footer{
-    margin-top:4rem;padding:3rem 2rem 2rem;
-    border-top:1px solid var(--rule);
-    max-width:1320px;margin-left:auto;margin-right:auto;
-    display:grid;grid-template-columns:1fr auto;gap:2rem;align-items:end;
-    font-family:var(--font-mono);font-size:0.75rem;color:var(--muted);
-    letter-spacing:0.04em;
-  }
-  footer .mark{font-family:var(--font-serif);font-style:italic;color:var(--ink);font-size:1rem;letter-spacing:-0.01em}
+  footer{margin-top:4rem;padding:3rem 2rem 2rem;border-top:1px solid var(--rule);max-width:1320px;margin-left:auto;margin-right:auto;display:grid;grid-template-columns:1fr auto;gap:2rem;align-items:end;font-family:var(--font-mono);font-size:0.75rem;color:var(--muted)}
+  footer .mark{font-family:var(--font-serif);font-style:italic;color:var(--ink);font-size:1rem}
 
-  /* Responsive */
   @media (max-width:1100px){
     .smalls{grid-template-columns:repeat(2,1fr)}
     .masthead{grid-template-columns:1fr;gap:2rem}
     .masthead .right{border-left:none;padding-left:0;border-top:1px solid var(--rule);padding-top:2rem}
-    .momentum{grid-template-columns:1fr}
     .usecases{grid-template-columns:1fr}
     .stats-strip{grid-template-columns:repeat(2,1fr);gap:1.5rem}
     .stat{border-right:none}
-    .lb-row{grid-template-columns: 30px 1.2fr 90px 1fr 80px}
+    .dna-grid{grid-template-columns:repeat(2,1fr)}
+    .lb-row{grid-template-columns:30px 1.2fr 90px 1fr 80px}
     .lb-row .lb-builder,.lb-row .lb-num.cnt-sites{display:none}
-    .questions{grid-template-columns:1fr}
-    .region-row{grid-template-columns:120px 1fr 80px 70px}
+    .tr-row{grid-template-columns:1fr;gap:0.5rem}
+    .br-heat .h-row{grid-template-columns:80px repeat(13,1fr)}
   }
-
-  /* SVG niceties */
-  .axis text{font-family:var(--font-mono);font-size:9px;fill:var(--muted)}
-  .axis line, .axis path{stroke:var(--rule);stroke-width:1;fill:none}
 </style>
 </head>
 <body>
@@ -373,15 +165,16 @@
       <span class="back-arr">←</span>
       <span class="mark"></span>
       PRUS Insight
-      <small>Apartment Pre-Sale Intelligence</small>
+      <small>Brand Intelligence</small>
       <span class="crumb">Brand</span>
     </a>
     <nav class="nav">
-      <a href="#brand">Brand</a>
-      <a href="#trend">Trend</a>
-      <a href="#region">Region</a>
-      <a href="#questions">Questions</a>
-      <a href="#use">Use Cases</a>
+      <a href="#lb">Leaderboard</a>
+      <a href="#traj">Trajectory</a>
+      <a href="#dna">DNA</a>
+      <a href="#geo">Geography</a>
+      <a href="#top">Regional #1</a>
+      <a href="#use">Pricing</a>
     </nav>
     <span class="badge-live">LIVE · 2026 Q2</span>
   </div>
@@ -389,165 +182,122 @@
 
 <main>
 
-<!-- MASTHEAD -->
 <section class="masthead">
   <div>
-    <div class="eyebrow">B2B Insight Edition · MVP Preview</div>
-    <h1>한국 분양 시장,<br/>고객의 목소리를<br/><em>숫자로 읽다.</em></h1>
-    <p class="kicker">2017년부터 누적된 256만 건의 분양 부스 응답. 모든 메이저 브랜드, 모든 시도, 매월 갱신.</p>
+    <div class="eyebrow">Category 01 · Brand Intelligence</div>
+    <h1>아파트 브랜드의<br/>10년치 <em>지위</em>를<br/>한 화면에.</h1>
+    <p class="kicker">힐스테이트·자이·롯데캐슬·푸르지오 등 30+ 메이저 브랜드의 응답수·만족도·지역 점유·인구통계 통합 보드.</p>
   </div>
   <aside class="right">
     <dl class="meta-list">
-      <div><dt>Data Window</dt><dd>2017 Apr — 2026 May</dd></div>
-      <div><dt>Coverage</dt><dd>17개 시도 · 5,736 분양 현장</dd></div>
-      <div><dt>Update</dt><dd>실시간 (PRUS 현장 입력 → 24시간 내)</dd></div>
-      <div><dt>Edition</dt><dd>MVP · 2026.05.31 기준</dd></div>
+      <div><dt>Brands Tracked</dt><dd>30+ (N ≥ 5,000)</dd></div>
+      <div><dt>Total Responses</dt><dd>약 200만건 (브랜드 부여 현장)</dd></div>
+      <div><dt>Time Window</dt><dd>2017 — 2026 (10년)</dd></div>
+      <div><dt>Sample Threshold</dt><dd>지역별 N ≥ 50 비공개 차단</dd></div>
     </dl>
   </aside>
 </section>
 
-<!-- HERO STATS -->
 <section class="stats-strip">
-  <div class="stat">
-    <div class="label">Respondents</div>
-    <div class="value">2.56<span class="unit">M명</span></div>
-    <div class="delta">↑ 28% YoY (2025 vs 2024)</div>
-  </div>
-  <div class="stat">
-    <div class="label">Survey Answers</div>
-    <div class="value">14.36<span class="unit">M건</span></div>
-    <div class="delta">75,290개 객관식 선택지 매핑</div>
-  </div>
-  <div class="stat">
-    <div class="label">Brands Tracked</div>
-    <div class="value">30<span class="unit">+ (N≥5K)</span></div>
-    <div class="delta">메이저 시공사 100% 커버</div>
-  </div>
-  <div class="stat">
-    <div class="label">Pre-Sale Sites</div>
-    <div class="value">5,736<span class="unit">개</span></div>
-    <div class="delta">10년치 종단 비교 가능</div>
-  </div>
+  <div class="stat"><div class="label">TOP 1 Brand</div><div class="value">힐스테이트</div><div class="delta">211,098 응답 · 425 현장</div></div>
+  <div class="stat"><div class="label">Highest Rated</div><div class="value">수자인</div><div class="delta">★ 3.77 (한양건설 · N=18,661)</div></div>
+  <div class="stat"><div class="label">Fastest Growing</div><div class="value">호반써밋</div><div class="delta">2020 진입 · ★ 3.47 (TOP 1)</div></div>
+  <div class="stat"><div class="label">Most Dominant Region</div><div class="value">대구 → 힐스테이트</div><div class="delta">49,016 응답 (시도 1위 압도)</div></div>
 </section>
 
-<!-- SECTION 1: BRAND LEADERBOARD -->
-<section class="section" id="brand">
+<!-- 01 LEADERBOARD -->
+<section class="section" id="lb">
   <div class="section-head">
     <div class="num">01 / Brand Leaderboard</div>
-    <h2>브랜드 <em>리더보드</em><br/>응답수 · 만족도 · 1~4점 분포</h2>
+    <h2>30개 브랜드<br/><em>리더보드</em></h2>
     <div class="tabs">
       <button class="tab-btn active" data-sort="n">VOLUME</button>
       <button class="tab-btn" data-sort="r">RATING</button>
     </div>
   </div>
-
-  <div class="leaderboard" id="lb">
+  <div class="leaderboard" id="lbWrap">
     <div class="lb-row head">
-      <div></div>
-      <div>BRAND</div>
-      <div>대표 시공사</div>
+      <div></div><div>BRAND</div><div>대표 시공사</div>
       <div class="lb-num cnt-sites" style="text-align:right">현장</div>
       <div>응답수 / 별점 분포</div>
       <div style="text-align:right">응답</div>
       <div style="text-align:right">★</div>
     </div>
-    <!-- rows injected by JS -->
   </div>
 </section>
 
-<!-- SECTION 2: BRAND × YEAR SMALL MULTIPLES -->
-<section class="section" id="trend">
+<!-- 02 TRAJECTORY -->
+<section class="section" id="traj">
   <div class="section-head">
     <div class="num">02 / Brand Trajectory</div>
     <h2>10대 브랜드의 <em>10년</em><br/>별점은 어떻게 움직였나</h2>
-    <div class="lede">분양 시점 응답 별점의 연도별 추이. 응답수는 막대, 평균 별점은 라인.</div>
+    <div class="lede">응답수는 막대, 평균 별점은 라인. 우상향이 의미하는 것: 모델하우스·상담 운영 품질의 개선.</div>
   </div>
-
   <div class="smalls" id="smalls"></div>
 </section>
 
-<!-- SECTION 3: MOMENTUM -->
-<section class="section" id="momentum">
+<!-- 03 DNA CARDS -->
+<section class="section" id="dna">
   <div class="section-head">
-    <div class="num">03 / Market Momentum</div>
-    <h2>최근 <em>36개월</em><br/>응답수와 만족도의 동행</h2>
-    <div class="lede">시장 회복기 (2024~) 응답수와 만족도가 함께 상승. 시장 신뢰 회복 신호.</div>
+    <div class="num">03 / Brand DNA Cards</div>
+    <h2>10대 브랜드의 <em>인구통계 DNA</em><br/>여성 비율 · 50대+ 비중</h2>
+    <div class="lede">N = 198,634 응답. 시장 평균 대비 각 브랜드 포지션. 검정 세로선이 시장 평균.</div>
   </div>
+  <div class="dna-grid" id="dnaGrid"></div>
+</section>
 
-  <div class="momentum">
-    <div class="momentum-chart">
-      <svg id="momentum-svg" viewBox="0 0 720 340" preserveAspectRatio="none"></svg>
-      <div class="legend">
-        <span><i style="background:var(--accent-2)"></i>월별 응답수</span>
-        <span><i style="background:var(--accent)"></i>평균 별점 (1~4)</span>
-      </div>
+<!-- 04 BRAND X REGION HEATMAP -->
+<section class="section" id="geo">
+  <div class="section-head">
+    <div class="num">04 / Brand × Region Heatmap</div>
+    <h2>브랜드의 <em>지리적 지배</em><br/>응답수 매트릭스</h2>
+    <div class="lede">각 셀 농도 = 해당 브랜드 × 시도 응답수. 한 행은 한 브랜드의 영토 지도.</div>
+  </div>
+  <div class="br-heat" id="brHeat"></div>
+  <div style="margin-top:1.4rem;font-family:var(--font-mono);font-size:0.72rem;color:var(--muted);letter-spacing:0.04em">
+    셀 색이 진할수록 응답수 큼 · 빨간 테두리 = 해당 브랜드의 최대 지역 · 마우스 오버 시 정확한 수치
+  </div>
+</section>
+
+<!-- 05 TOP BRAND PER REGION -->
+<section class="section" id="top">
+  <div class="section-head">
+    <div class="num">05 / Regional #1 Brand</div>
+    <h2>각 시도의 <em>지배 브랜드</em><br/>TOP 3 랭킹</h2>
+    <div class="lede">서울 1위는 한양수자인, 광주 1위는 대광로제비앙 — 메이저 브랜드 일변도가 아닌 지역마다 다른 강자.</div>
+  </div>
+  <div class="top-region" id="topRegion">
+    <div class="tr-row head">
+      <div>시도</div><div>1위</div><div>2위</div><div>3위</div>
     </div>
-
-    <div class="annotations">
-      <div class="annot">
-        <div class="date">2025 SEP</div>
-        <div class="body">단일 월 <strong>39,393건</strong> 응답 — 최근 5년 최대치. 가을 분양 성수기 진입.</div>
-      </div>
-      <div class="annot">
-        <div class="date">2024 — 2026</div>
-        <div class="body">평균 별점 <strong>3.17 → 3.56</strong> 12% 상승. 모델하우스 운영 품질 개선 추세.</div>
-      </div>
-      <div class="annot">
-        <div class="date">2023</div>
-        <div class="body">시장 침체기, 월평균 응답 <strong>1.3만건</strong>까지 하락. 분양 일정 연기 영향.</div>
-      </div>
-    </div>
   </div>
 </section>
 
-<!-- SECTION 4: REGIONS -->
-<section class="section" id="region">
-  <div class="section-head">
-    <div class="num">04 / Regional Intelligence</div>
-    <h2>시도별 <em>분양 활동량</em><br/>응답수 · 평균 만족도</h2>
-    <div class="lede">경기·인천·충남이 응답수 상위. 만족도는 인천·대전이 상위권.</div>
-  </div>
-
-  <div class="regions" id="regions"></div>
-</section>
-
-<!-- SECTION 5: QUESTIONS -->
-<section class="section" id="questions">
-  <div class="section-head">
-    <div class="num">05 / Standard Question Library</div>
-    <h2>현장 간 <em>횡단 비교</em>가<br/>가능한 표준 질문</h2>
-    <div class="lede">수백 현장이 동일 문구로 사용한 질문들. 브랜드별 동일 척도 비교의 기준선.</div>
-  </div>
-
-  <div class="questions" id="questions-grid"></div>
-</section>
-
-<!-- SECTION 6: USE CASES -->
+<!-- 06 USE CASES -->
 <section class="section" id="use">
   <div class="section-head">
-    <div class="num">06 / Pricing &amp; Use Cases</div>
-    <h2>누가, <em>왜</em>,<br/>이 데이터를 구독하는가</h2>
-    <div class="lede">3가지 구독 티어. 모든 데이터는 집계·익명화 처리.</div>
+    <div class="num">06 / Brand Subscription Tier</div>
+    <h2>시공사가 <em>왜</em><br/>이 데이터를 구독하는가</h2>
+    <div class="lede">3가지 활용 시나리오. 자사 브랜드 + 경쟁 브랜드 모니터링 기준.</div>
   </div>
-
   <div class="usecases">
     <div class="uc">
-      <div class="tag">TIER 01 · BRAND</div>
-      <h3>시공사 <em>브랜드 모니터링</em></h3>
-      <p>자사 브랜드 vs 경쟁 브랜드의 별점·응답수 추이, 지역별 강약점. 분기 보고서 자동 생성. 신규 브랜드 런칭 전 시장 감(感) 파악에 활용.</p>
+      <div class="tag">USE 01 · QUARTERLY REPORT</div>
+      <h3>분기 브랜드 <em>리포트</em></h3>
+      <p>자사 브랜드 별점·응답수 추이를 분기별 자동 리포트로 수신. 경쟁사 비교 그래프 + 카테고리 평균 갭. 임원 보고 자료로 즉시 사용.</p>
       <div class="price">월 ₩2,500,000~</div>
     </div>
     <div class="uc">
-      <div class="tag">TIER 02 · DEVELOPER</div>
-      <h3>시행사 <em>입지 인텔리전스</em></h3>
-      <p>관심 지역의 최근 N년 분양 흐름, 평형·청약통장·연령대 분포. 신규 사업지 검토 시 수요층 프로파일 즉시 확인. 경쟁 사업 동시기 응답수 비교.</p>
-      <div class="price">월 ₩1,500,000~</div>
+      <div class="tag">USE 02 · LAUNCH RESEARCH</div>
+      <h3>신규 브랜드 <em>런칭 시장조사</em></h3>
+      <p>신규 서브 브랜드 출시 전, 동급 브랜드의 별점·연령·여성비율 벤치마크. 정량 시장조사 외주 비용 (수천만원) 대체.</p>
+      <div class="price">건당 ₩5,000,000~</div>
     </div>
     <div class="uc">
-      <div class="tag">TIER 03 · AGENCY</div>
-      <h3>광고대행사 <em>전략 대시보드</em></h3>
-      <p>제안서·피칭용 시장 슬라이드 즉시 다운로드. 카테고리 평균 대비 클라이언트 현장 성과. 동일 브랜드 전국 사례 라이브러리.</p>
-      <div class="price">월 ₩800,000~</div>
+      <div class="tag">USE 03 · TERRITORY MAP</div>
+      <h3>지역별 <em>영토 지도</em></h3>
+      <p>자사 브랜드의 시도별 점유율과 약한 지역 식별. 신규 분양 사업지 검토 시 카테고리 강도 즉시 확인. 영업 우선순위 결정.</p>
+      <div class="price">월 ₩1,800,000~</div>
     </div>
   </div>
 </section>
@@ -555,21 +305,12 @@
 </main>
 
 <footer>
-  <div>
-    <span class="mark">PRUS Insight</span> &nbsp;·&nbsp;
-    Aggregated from PRUS Pre-Sale Survey Platform · 2017–2026 ·
-    All metrics anonymized at brand/region/year level (N≥5,000 disclosure rule)
-  </div>
-  <div>v0.1 MVP · Built 2026-05-31</div>
+  <div><span class="mark">PRUS Insight</span> · Brand Intelligence Edition · Aggregated 2017–2026 · 집계 단위 익명화</div>
+  <div>v0.2 · Brand · 2026-05-31</div>
 </footer>
 
 <script>
-// ============================================================
-// REAL DATA (extracted from PRUS MSSQL on 2026-05-31)
-// ============================================================
-
-// Brand leaderboard: top 30 brands by response count
-// [brand, builder_hint, n, avg_rating, r4, r3, r2, r1, site_count]
+// DATA
 const BRANDS = [
   ["힐스테이트","현대건설/현대ENG",211098,3.04,37216,123129,20237,4387,425],
   ["자이","GS건설",139442,3.19,36774,71201,11005,1508,188],
@@ -602,95 +343,74 @@ const BRANDS = [
   ["해링턴 플레이스","효성중공업",17811,3.40,7735,8351,740,123,21],
   ["알프하임","알프하임",17030,2.89,0,12359,1361,51,24],
 ];
-
-// Brand × Year matrix for top 10 brands
 const BRAND_YEAR = {
-  "힐스테이트":  [[2017,11091,2.88],[2018,50881,2.80],[2019,22119,2.81],[2020,27564,2.85],[2021,22951,2.68],[2022,22380,3.04],[2023,12690,3.32],[2024,23865,3.60],[2025,9523,3.89],[2026,8034,3.81]],
-  "자이":       [[2017,13695,2.77],[2018,9916,2.84],[2019,7301,2.94],[2020,7176,2.80],[2021,2262,2.58],[2022,13067,2.90],[2023,12681,2.99],[2024,34876,3.42],[2025,28926,3.49],[2026,9542,3.52]],
-  "e편한세상":   [[2017,12999,2.87],[2018,1860,2.91],[2019,10701,2.86],[2020,24170,2.90],[2021,8366,2.69],[2022,20842,2.94],[2023,11260,3.26],[2024,10537,3.74],[2025,7637,3.71],[2026,2228,3.92]],
-  "롯데캐슬":    [[2017,9503,2.71],[2018,8472,2.89],[2019,9752,2.83],[2020,1844,2.89],[2021,3039,2.81],[2022,8188,2.82],[2023,3648,3.43],[2024,22189,3.02],[2025,15129,3.63],[2026,9833,2.98]],
-  "푸르지오":    [[2017,6065,2.86],[2018,10882,2.73],[2019,18082,2.89],[2020,4478,2.80],[2021,13196,2.81],[2022,8930,2.90],[2023,904,2.65],[2024,17461,3.71],[2025,6926,3.37],[2026,2608,3.89]],
-  "더샵":       [[2017,6107,2.41],[2018,14012,2.78],[2019,14574,2.93],[2020,1313,2.97],[2021,13100,2.77],[2022,11871,2.65],[2023,2538,2.78],[2024,12618,3.06],[2025,4355,2.88],[2026,5724,3.56]],
-  "제일풍경채":  [[2017,4268,2.94],[2018,799,2.97],[2019,9461,2.88],[2020,17068,2.89],[2021,5461,2.63],[2022,690,2.93],[2023,8654,3.59],[2024,2041,3.11],[2025,9134,3.82],[2026,184,3.72]],
-  "아이파크":   [[2017,14027,2.92],[2018,11132,2.88],[2019,2441,2.50],[2020,487,2.28],[2021,8035,2.77],[2022,4732,2.92],[2023,890,3.13],[2024,5028,2.99],[2025,8512,3.30],[2026,2,null]],
-  "호반써밋":   [[2020,8517,2.79],[2021,3008,2.53],[2022,4278,3.08],[2023,11393,3.61],[2024,14,3.08],[2025,14683,3.81],[2026,13033,3.75]],
+  "힐스테이트":[[2017,11091,2.88],[2018,50881,2.80],[2019,22119,2.81],[2020,27564,2.85],[2021,22951,2.68],[2022,22380,3.04],[2023,12690,3.32],[2024,23865,3.60],[2025,9523,3.89],[2026,8034,3.81]],
+  "자이":[[2017,13695,2.77],[2018,9916,2.84],[2019,7301,2.94],[2020,7176,2.80],[2021,2262,2.58],[2022,13067,2.90],[2023,12681,2.99],[2024,34876,3.42],[2025,28926,3.49],[2026,9542,3.52]],
+  "e편한세상":[[2017,12999,2.87],[2018,1860,2.91],[2019,10701,2.86],[2020,24170,2.90],[2021,8366,2.69],[2022,20842,2.94],[2023,11260,3.26],[2024,10537,3.74],[2025,7637,3.71],[2026,2228,3.92]],
+  "롯데캐슬":[[2017,9503,2.71],[2018,8472,2.89],[2019,9752,2.83],[2020,1844,2.89],[2021,3039,2.81],[2022,8188,2.82],[2023,3648,3.43],[2024,22189,3.02],[2025,15129,3.63],[2026,9833,2.98]],
+  "푸르지오":[[2017,6065,2.86],[2018,10882,2.73],[2019,18082,2.89],[2020,4478,2.80],[2021,13196,2.81],[2022,8930,2.90],[2023,904,2.65],[2024,17461,3.71],[2025,6926,3.37],[2026,2608,3.89]],
+  "더샵":[[2017,6107,2.41],[2018,14012,2.78],[2019,14574,2.93],[2020,1313,2.97],[2021,13100,2.77],[2022,11871,2.65],[2023,2538,2.78],[2024,12618,3.06],[2025,4355,2.88],[2026,5724,3.56]],
+  "제일풍경채":[[2017,4268,2.94],[2018,799,2.97],[2019,9461,2.88],[2020,17068,2.89],[2021,5461,2.63],[2022,690,2.93],[2023,8654,3.59],[2024,2041,3.11],[2025,9134,3.82],[2026,184,3.72]],
+  "아이파크":[[2017,14027,2.92],[2018,11132,2.88],[2019,2441,2.50],[2020,487,2.28],[2021,8035,2.77],[2022,4732,2.92],[2023,890,3.13],[2024,5028,2.99],[2025,8512,3.30],[2026,2,null]],
+  "호반써밋":[[2020,8517,2.79],[2021,3008,2.53],[2022,4278,3.08],[2023,11393,3.61],[2024,14,3.08],[2025,14683,3.81],[2026,13033,3.75]],
   "대광로제비앙":[[2017,10759,2.91],[2018,10898,2.78],[2019,13344,2.97],[2020,9334,2.76],[2023,2412,3.36],[2024,1786,3.11],[2025,4725,3.00],[2026,8,4.00]],
 };
+const DNA = [
+  ["힐스테이트","현대건설", 65.80, 66.79],
+  ["자이","GS건설",        65.02, 62.71],
+  ["e편한세상","DL이앤씨", 66.20, 63.00],
+  ["롯데캐슬","롯데건설",   70.26, 70.70],
+  ["푸르지오","대우건설",   70.07, 65.66],
+  ["더샵","포스코이앤씨",   67.75, 63.64],
+  ["제일풍경채","제일건설", 65.22, 65.81],
+  ["아이파크","HDC현산",   69.34, 62.80],
+  ["호반써밋","호반건설",   65.43, 70.40],
+  ["대광로제비앙","대광건영", null, 80.78],
+];
+const DNA_AVG_F = 66.7, DNA_AVG_50P = 66.0;
 
-// Last 36 months: [ym, count, avg_rating]
-const MOMENTUM = [
-  ["2023-05",310,3.65],["2023-06",15510,3.62],["2023-07",13403,3.18],["2023-08",6582,3.35],
-  ["2023-09",20740,3.31],["2023-10",12790,3.27],["2023-11",18687,3.02],["2023-12",17257,3.38],
-  ["2024-01",23888,3.42],["2024-02",14342,3.60],["2024-03",16428,3.23],["2024-04",28537,3.17],
-  ["2024-05",18325,3.44],["2024-06",23066,3.32],["2024-07",15260,3.56],["2024-08",17147,3.35],
-  ["2024-09",25570,3.37],["2024-10",25464,3.51],["2024-11",30725,3.59],["2024-12",17696,3.30],
-  ["2025-01",23430,3.45],["2025-02",8693,3.58],["2025-03",22929,3.58],["2025-04",18629,3.26],
-  ["2025-05",15899,3.30],["2025-06",35264,3.49],["2025-07",22016,3.53],["2025-08",35920,3.53],
-  ["2025-09",39393,3.64],["2025-10",26413,3.60],["2025-11",25995,3.52],["2025-12",14723,3.64],
-  ["2026-01",8497,3.56],["2026-02",9229,3.68],["2026-03",34512,3.51],["2026-04",28136,3.57],
-  ["2026-05",20586,3.56]
+// Brand X Region matrix [brand][sido] = n
+const BRG_SIDOS = ['경기','서울','인천','대구','부산','대전','광주','충남','충북','경북','경남','전남','전북','강원','제주'];
+const BRG = {
+  "힐스테이트":   {경기:91608, 대구:49016, 인천:15901, 충남:11628, 서울:9624, 대전:8643, 부산:5601, 강원:5357, 전남:5031, 광주:4137, 경북:2185, 경남:970, 전북:640},
+  "자이":        {경기:54873, 충남:14362, 경남:14004, 대구:10483, 전남:9007, 광주:7436, 강원:6369, 경북:4027, 대전:3922, 충북:3137, 서울:2741, 인천:2592},
+  "e편한세상":   {경기:48816, 인천:20655, 충남:8581, 서울:6920, 경남:5597, 대전:4967, 부산:3402, 충북:2168, 전남:1539, 대구:1347, 전북:1314, 제주:1173},
+  "롯데캐슬":    {경기:38611, 서울:9937, 인천:8971, 부산:7938, 경남:5718, 충남:4637, 강원:3003, 전남:2138, 광주:1395, 충북:94},
+  "푸르지오":    {경기:25276, 인천:20085, 전남:7502, 대구:5937, 서울:5349, 강원:4765, 충남:4700, 경북:4150, 경남:3555, 대전:2500, 제주:1658, 충북:919, 부산:479},
+  "더샵":        {경기:26221, 충남:14686, 인천:10230, 부산:9527, 전북:9403, 대구:3930, 강원:3336, 경북:2071, 경남:1801, 전남:1519, 대전:1150, 제주:1058, 서울:450},
+  "제일풍경채":  {경기:43201, 대구:4640, 경북:2963, 인천:2698, 전북:2498, 광주:1251, 경남:324, 전남:185},
+  "아이파크":    {경기:17609, 서울:10789, 경북:9321, 충북:2881, 충남:2664, 인천:2492, 강원:2390, 광주:1887, 제주:1771, 전북:1041},
+  "호반써밋":    {경기:30152, 인천:7763, 충남:6325, 경북:2420, 서울:2204, 제주:1634, 대전:1421, 대구:1010},
+  "대광로제비앙":{경기:21659, 광주:11322, 전남:6073, 인천:5161, 대구:3918, 충북:1480},
+};
+// Top brand per region (top 3 per sido)
+const TOP_REGION = [
+  ["경기", [["힐스테이트",91608],["자이",54873],["e편한세상",48816]]],
+  ["서울", [["한양수자인",11296],["아이파크",10789],["롯데캐슬",9937]]],
+  ["인천", [["e편한세상",20655],["푸르지오",20085],["힐스테이트",15901]]],
+  ["대구", [["힐스테이트",49016],["빌리브",14082],["동화 아이위시",10986]]],
+  ["부산", [["더샵",9527],["롯데캐슬",7938],["더조은몰",6380]]],
+  ["대전", [["힐스테이트",8643],["하늘채",8445],["e편한세상",4967]]],
+  ["광주", [["대광로제비앙",11322],["자이",7436],["모아엘가",5726]]],
+  ["충남", [["더샵",14686],["자이",14362],["힐스테이트",11628]]],
+  ["전남", [["자이",9007],["푸르지오",7502],["대성베르힐",7145]]],
+  ["경북", [["포레나",11022],["이편한세상",10440],["아이파크",9321]]],
 ];
 
-// Sido (cleaned)
-const REGIONS = [
-  ["경기도",        978,1000660,3.11],
-  ["대구광역시",    180, 277355,2.92],
-  ["인천광역시",    131, 200793,3.25],
-  ["충청남도",      170, 164066,3.11],
-  ["전라남도",       67, 104862,2.90],
-  ["경상북도",       67,  98986,2.86],
-  ["부산광역시",     87,  78147,3.05],
-  ["광주광역시",     64,  75498,2.88],
-  ["강원도",         79,  69098,2.83],
-  ["서울특별시",     99,  67433,3.17],
-  ["경상남도",       60,  57033,2.94],
-  ["대전광역시",     61,  52441,3.25],
-  ["전라북도",       37,  42677,2.73],
-  ["충청북도",       35,  37696,2.99],
-  ["제주특별자치도", 41,  16789,2.85],
-  ["세종특별자치시",  9,   8079,2.85],
-  ["울산광역시",      6,   4289,2.86],
-];
-
-// Top standard questions
-const QUESTIONS = [
-  ["고객님의 연령대는 어떻게 되십니까?",517],
-  ["귀하의 연령대는 어떻게 되십니까?",321],
-  ["고객님의 성별은 어떻게 되십니까?",196],
-  ["귀하의 성별은 어떻게 되십니까?",129],
-  ["귀하께서는 청약통장을 보유하고 계십니까?",75],
-  ["구매를 하신다면 어떤 목적으로 구매하시나요?",69],
-  ["고객님의 거주지역은 어떻게 되십니까?",42],
-  ["청약통장의 순위는 어떻게 되십니까?",39],
-  ["고객님의 관심타입은 어떻게 되십니까?(상업시설)",33],
-  ["고객님의 관심타입은 어떻게 되십니까?(오피스텔)",33],
-  ["청약통장을 보유하고 계십니까?",30],
-  ["고객님께서는 청약통장을 보유하고 계십니까?",29],
-  ["고객님의 청약순위는 어떻게 되십니까?",26],
-  ["귀하의 청약통장 순위는 어떻게 되십니까?",26],
-  ["고객님께서 희망하는 전용면적은 어떤 것입니까?",25],
-  ["귀하께서 아파트 구매 시 가장 중요시 생각하시는 부분은 어떤 점입니까?",24],
-];
-
-// ============================================================
-// RENDER: LEADERBOARD
-// ============================================================
 function fmt(n){return n.toLocaleString('ko-KR')}
 function fmtK(n){if(n>=1e6)return (n/1e6).toFixed(2)+'M';if(n>=1e3)return (n/1e3).toFixed(0)+'K';return n}
 
-function renderLB(sortKey){
-  const sorted = [...BRANDS];
-  if(sortKey==='r') sorted.sort((a,b)=>b[3]-a[3]);
-  else sorted.sort((a,b)=>b[2]-a[2]);
-  const wrap = document.getElementById('lb');
-  // remove all but header
-  [...wrap.querySelectorAll('.lb-row:not(.head)')].forEach(el=>el.remove());
-  sorted.forEach((b,i)=>{
+// RENDER LEADERBOARD
+function renderLB(sort){
+  const arr=[...BRANDS];
+  if(sort==='r') arr.sort((a,b)=>b[3]-a[3]); else arr.sort((a,b)=>b[2]-a[2]);
+  const w=document.getElementById('lbWrap');
+  [...w.querySelectorAll('.lb-row:not(.head)')].forEach(e=>e.remove());
+  arr.forEach((b,i)=>{
     const [brand,builder,n,r,r4,r3,r2,r1,sites]=b;
-    const total=r4+r3+r2+r1 || 1;
-    const ratingHi = r>=3.3;
-    const ratingLo = r<2.9;
-    const html = `
+    const tot=r4+r3+r2+r1||1;
+    const hi=r>=3.3, lo=r<2.9;
+    w.insertAdjacentHTML('beforeend',`
       <div class="lb-row">
         <div class="lb-rank">${String(i+1).padStart(2,'0')}</div>
         <div class="lb-brand">${brand}</div>
@@ -698,197 +418,123 @@ function renderLB(sortKey){
         <div class="lb-num cnt-sites">${sites}</div>
         <div>
           <div class="rating-bar">
-            <span class="r4" style="width:${r4/total*100}%"></span>
-            <span class="r3" style="width:${r3/total*100}%"></span>
-            <span class="r2" style="width:${r2/total*100}%"></span>
-            <span class="r1" style="width:${r1/total*100}%"></span>
+            <span class="r4" style="width:${r4/tot*100}%"></span>
+            <span class="r3" style="width:${r3/tot*100}%"></span>
+            <span class="r2" style="width:${r2/tot*100}%"></span>
+            <span class="r1" style="width:${r1/tot*100}%"></span>
           </div>
-          <span class="star-marker">★4 ${(r4/total*100).toFixed(0)}% &nbsp; ★3 ${(r3/total*100).toFixed(0)}% &nbsp; ★2 ${(r2/total*100).toFixed(0)}% &nbsp; ★1 ${(r1/total*100).toFixed(0)}%</span>
+          <span class="star-marker">★4 ${(r4/tot*100).toFixed(0)}% &nbsp; ★3 ${(r3/tot*100).toFixed(0)}% &nbsp; ★2 ${(r2/tot*100).toFixed(0)}% &nbsp; ★1 ${(r1/tot*100).toFixed(0)}%</span>
         </div>
         <div class="lb-num-big">${fmtK(n)}</div>
-        <div class="lb-num-big ${ratingHi?'hi':ratingLo?'lo':''}">${r.toFixed(2)}</div>
-      </div>`;
-    wrap.insertAdjacentHTML('beforeend',html);
+        <div class="lb-num-big ${hi?'hi':lo?'lo':''}">${r.toFixed(2)}</div>
+      </div>`);
   });
 }
 renderLB('n');
-document.querySelectorAll('.tab-btn').forEach(b=>{
-  b.addEventListener('click',()=>{
-    document.querySelectorAll('.tab-btn').forEach(x=>x.classList.remove('active'));
-    b.classList.add('active');
-    renderLB(b.dataset.sort);
-  });
-});
+document.querySelectorAll('.tab-btn').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('.tab-btn').forEach(x=>x.classList.remove('active'));b.classList.add('active');renderLB(b.dataset.sort);}));
 
-// ============================================================
-// RENDER: SMALL MULTIPLES (Brand x Year)
-// ============================================================
-function smallChart(data, brand){
+// SMALL MULTIPLES
+function smallChart(data){
   const W=240,H=80,padL=4,padR=4,padT=8,padB=14;
-  const years = data.map(d=>d[0]);
-  const counts = data.map(d=>d[1]);
-  const ratings = data.map(d=>d[2]);
-  const maxC = Math.max(...counts);
-  const minY = Math.min(...years), maxY = Math.max(...years);
-  const xScale = y => years.length===1 ? W/2 : padL + (y-minY)/(maxY-minY)*(W-padL-padR);
-  const yBarH = c => (c/maxC)*(H-padT-padB);
-  // bars
-  const barW = Math.max(8, (W-padL-padR)/years.length*0.6);
-  let bars = data.map(([y,c,r])=>{
-    const x = xScale(y) - barW/2;
-    const h = yBarH(c);
-    return `<rect x="${x}" y="${H-padB-h}" width="${barW}" height="${h}" fill="rgba(133,127,112,0.35)"/>`;
-  }).join('');
-  // rating line (1..4 -> top..bottom inverted)
-  const rmin=2.2,rmax=4.0;
-  const yR = r => r==null ? null : padT + (1-(r-rmin)/(rmax-rmin))*(H-padT-padB);
-  const linePts = data.map(([y,c,r])=>{
-    const yy = yR(r); if(yy==null) return null;
-    return [xScale(y), yy];
-  }).filter(Boolean);
-  const path = linePts.length>1 ? 'M' + linePts.map(p=>p.join(',')).join(' L ') : '';
-  const dots = linePts.map(p=>`<circle cx="${p[0]}" cy="${p[1]}" r="2.4" fill="#B8482B" stroke="#F4EFE6" stroke-width="1"/>`).join('');
-  // baseline
-  const yearLabels = [years[0], years[years.length-1]].map((y,i)=>{
-    const x = i===0 ? padL+4 : W-padR-4;
-    const a = i===0?'start':'end';
-    return `<text x="${x}" y="${H-2}" text-anchor="${a}" font-family="JetBrains Mono" font-size="9" fill="#857F70">${y}</text>`;
-  }).join('');
-  return `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none">
-    ${bars}
-    ${path?`<path d="${path}" stroke="#B8482B" stroke-width="1.5" fill="none"/>`:''}
-    ${dots}
-    ${yearLabels}
-  </svg>`;
+  const years=data.map(d=>d[0]),counts=data.map(d=>d[1]),maxC=Math.max(...counts);
+  const minY=Math.min(...years),maxY=Math.max(...years);
+  const xS=y=>years.length===1?W/2:padL+(y-minY)/(maxY-minY)*(W-padL-padR);
+  const yBH=c=>(c/maxC)*(H-padT-padB);
+  const barW=Math.max(8,(W-padL-padR)/years.length*0.6);
+  const bars=data.map(([y,c])=>{const x=xS(y)-barW/2,h=yBH(c);return `<rect x="${x}" y="${H-padB-h}" width="${barW}" height="${h}" fill="rgba(133,127,112,0.35)"/>`;}).join('');
+  const yR=r=>r==null?null:padT+(1-(r-2.2)/(4.0-2.2))*(H-padT-padB);
+  const linePts=data.map(([y,c,r])=>{const yy=yR(r);return yy==null?null:[xS(y),yy];}).filter(Boolean);
+  const path=linePts.length>1?'M'+linePts.map(p=>p.join(',')).join(' L '):'';
+  const dots=linePts.map(p=>`<circle cx="${p[0]}" cy="${p[1]}" r="2.4" fill="#B8482B" stroke="#F4EFE6" stroke-width="1"/>`).join('');
+  const yL=[years[0],years[years.length-1]].map((y,i)=>{const x=i===0?padL+4:W-padR-4,a=i===0?'start':'end';return `<text x="${x}" y="${H-2}" text-anchor="${a}" font-family="JetBrains Mono" font-size="9" fill="#857F70">${y}</text>`;}).join('');
+  return `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none">${bars}${path?`<path d="${path}" stroke="#B8482B" stroke-width="1.5" fill="none"/>`:''}${dots}${yL}</svg>`;
 }
-
 function renderSmalls(){
-  const wrap = document.getElementById('smalls');
-  Object.entries(BRAND_YEAR).forEach(([brand,series])=>{
-    const last = series[series.length-1];
-    const totalN = series.reduce((s,d)=>s+d[1],0);
-    const lastR = last[2];
-    const firstR = series.find(d=>d[2]!=null)?.[2];
-    const delta = (lastR!=null && firstR!=null) ? (lastR-firstR) : null;
-    const arrow = delta>0.2 ? '↑' : delta<-0.2 ? '↓' : '→';
-    const html = `
-      <div class="small">
-        <h4>${brand}</h4>
-        <div class="sub">${fmt(totalN)} 응답 · ${series.length}년 추적</div>
-        ${smallChart(series,brand)}
-        <div class="foot">
-          <span>최근 평점</span>
-          <span class="now">${lastR?lastR.toFixed(2):'—'} ${arrow}</span>
-        </div>
-      </div>`;
-    wrap.insertAdjacentHTML('beforeend',html);
+  const w=document.getElementById('smalls');
+  Object.entries(BRAND_YEAR).forEach(([b,s])=>{
+    const last=s[s.length-1],tot=s.reduce((x,d)=>x+d[1],0),lr=last[2],fr=s.find(d=>d[2]!=null)?.[2];
+    const delta=(lr!=null&&fr!=null)?lr-fr:null;
+    const arr=delta>0.2?'↑':delta<-0.2?'↓':'→';
+    w.insertAdjacentHTML('beforeend',`<div class="small"><h4>${b}</h4><div class="sub">${fmt(tot)} 응답 · ${s.length}년 추적</div>${smallChart(s)}<div class="foot"><span>최근 평점</span><span class="now">${lr?lr.toFixed(2):'—'} ${arr}</span></div></div>`);
   });
 }
 renderSmalls();
 
-// ============================================================
-// RENDER: MOMENTUM DUAL-AXIS LINE CHART
-// ============================================================
-function renderMomentum(){
-  const svg = document.getElementById('momentum-svg');
-  const W=720,H=340,padL=46,padR=46,padT=30,padB=44;
-  const data = MOMENTUM;
-  const counts = data.map(d=>d[1]);
-  const ratings = data.map(d=>d[2]);
-  const maxC = Math.max(...counts);
-  const rMin=3.0, rMax=3.8;
-  const xScale = i => padL + (i/(data.length-1))*(W-padL-padR);
-  const yCount = c => H-padB - (c/maxC)*(H-padT-padB);
-  const yRating = r => H-padB - ((r-rMin)/(rMax-rMin))*(H-padT-padB);
-
-  // grid
-  let grid = '';
-  const ySteps = 4;
-  for(let i=0;i<=ySteps;i++){
-    const y = padT + (i/ySteps)*(H-padT-padB);
-    grid += `<line x1="${padL}" y1="${y}" x2="${W-padR}" y2="${y}" stroke="#D6CFBE" stroke-width="0.6"/>`;
-  }
-  // count area (bar-like)
-  let bars = data.map((d,i)=>{
-    const x = xScale(i)-5;
-    const y = yCount(d[1]);
-    const h = H-padB-y;
-    return `<rect x="${x}" y="${y}" width="9" height="${h}" fill="#2A4F4B" opacity="0.5"/>`;
-  }).join('');
-
-  // rating line
-  const rPts = data.map((d,i)=>[xScale(i),yRating(d[2])]);
-  const rPath = 'M ' + rPts.map(p=>p.join(',')).join(' L ');
-  const rDots = rPts.map((p,i)=>`<circle cx="${p[0]}" cy="${p[1]}" r="2.4" fill="#B8482B"/>`).join('');
-
-  // x labels (every 6 months)
-  let xlabs = '';
-  data.forEach((d,i)=>{
-    if(i%6===0 || i===data.length-1){
-      xlabs += `<text x="${xScale(i)}" y="${H-padB+18}" text-anchor="middle" font-family="JetBrains Mono" font-size="10" fill="#857F70">${d[0]}</text>`;
-    }
-  });
-  // y axis L (count)
-  let ylL='';
-  for(let i=0;i<=ySteps;i++){
-    const c = (maxC/ySteps)*(ySteps-i);
-    const y = padT + (i/ySteps)*(H-padT-padB);
-    ylL += `<text x="${padL-8}" y="${y+3}" text-anchor="end" font-family="JetBrains Mono" font-size="9" fill="#2A4F4B">${fmtK(Math.round(c))}</text>`;
-  }
-  // y axis R (rating)
-  let ylR='';
-  for(let i=0;i<=ySteps;i++){
-    const r = rMax - (rMax-rMin)*(i/ySteps);
-    const y = padT + (i/ySteps)*(H-padT-padB);
-    ylR += `<text x="${W-padR+8}" y="${y+3}" text-anchor="start" font-family="JetBrains Mono" font-size="9" fill="#B8482B">${r.toFixed(1)}</text>`;
-  }
-
-  // annotation marker at 2025-09 (max)
-  const maxIdx = counts.indexOf(maxC);
-  const mx = xScale(maxIdx), my = yCount(maxC);
-  const annot = `<line x1="${mx}" y1="${padT}" x2="${mx}" y2="${my}" stroke="#B8482B" stroke-width="0.8" stroke-dasharray="2 3"/>
-    <circle cx="${mx}" cy="${my}" r="4" fill="#B8482B"/>
-    <text x="${mx-6}" y="${my-8}" text-anchor="end" font-family="Fraunces" font-style="italic" font-size="11" fill="#B8482B">39,393건 — 최근 5년 최대</text>`;
-
-  svg.innerHTML = grid + bars + `<path d="${rPath}" fill="none" stroke="#B8482B" stroke-width="1.8"/>` + rDots + annot + xlabs + ylL + ylR;
-}
-renderMomentum();
-
-// ============================================================
-// RENDER: REGIONS
-// ============================================================
-function renderRegions(){
-  const wrap = document.getElementById('regions');
-  const max = Math.max(...REGIONS.map(r=>r[2]));
-  REGIONS.forEach(([name,sites,cust,rating])=>{
-    const pct = (cust/max*100).toFixed(1);
-    const hi = rating>=3.2;
-    wrap.insertAdjacentHTML('beforeend',`
-      <div class="region-row">
-        <div class="name">${name} <span style="font-family:var(--font-mono);font-size:0.72rem;color:var(--muted)">· ${sites}개 현장</span></div>
-        <div class="bar-wrap"><span style="width:${pct}%"></span></div>
-        <div class="n">${fmt(cust)}</div>
-        <div class="r" style="${hi?'color:var(--accent)':''}">${rating.toFixed(2)} ★</div>
+// DNA CARDS
+function renderDNA(){
+  const w=document.getElementById('dnaGrid');
+  DNA.forEach(([brand,builder,f,o])=>{
+    const fHi=f!==null&&f>=DNA_AVG_F+2;
+    const oHi=o>=DNA_AVG_50P+3;
+    const oLo=o<=DNA_AVG_50P-3;
+    let tag='';
+    if(o>=75) tag='<strong>극심한 고령</strong> · 베이비부머 집중';
+    else if(oHi) tag='<strong>고령 편향</strong> · 5060 메인';
+    else if(oLo) tag='<strong>젊은 브랜드</strong> · 2030~40 강세';
+    else if(fHi) tag='<strong>여성 편향 강함</strong> · 인테리어 마케팅 효과';
+    else tag='시장 평균 근접 · 균형 포지션';
+    w.insertAdjacentHTML('beforeend',`
+      <div class="dna">
+        <h4>${brand}</h4>
+        <div class="builder">${builder}</div>
+        <div class="metric ${fHi?'hi':''}">
+          <div class="mlbl"><span>FEMALE</span><em>평균 ${DNA_AVG_F}%</em></div>
+          <div class="mval">${f!==null?f.toFixed(1):'—'}<small>%</small></div>
+          <div class="bar"><span style="width:${f||0}%"></span><span class="avg" style="left:${DNA_AVG_F}%"></span></div>
+        </div>
+        <div class="metric ${oHi?'hi':''}">
+          <div class="mlbl"><span>50대+</span><em>평균 ${DNA_AVG_50P}%</em></div>
+          <div class="mval">${o.toFixed(1)}<small>%</small></div>
+          <div class="bar"><span style="width:${o}%"></span><span class="avg" style="left:${DNA_AVG_50P}%"></span></div>
+        </div>
+        <div class="tagline">${tag}</div>
       </div>`);
   });
 }
-renderRegions();
+renderDNA();
 
-// ============================================================
-// RENDER: QUESTIONS
-// ============================================================
-function renderQuestions(){
-  const wrap = document.getElementById('questions-grid');
-  QUESTIONS.forEach(([q,c])=>{
-    wrap.insertAdjacentHTML('beforeend',`
-      <div class="q">
-        <div class="text">${q}</div>
-        <div class="count">${c}개 현장</div>
-      </div>`);
+// BRAND X REGION HEATMAP
+function renderBRG(){
+  const w=document.getElementById('brHeat');
+  const brands=Object.keys(BRG);
+  // Find global max
+  let max=0;
+  brands.forEach(b=>BRG_SIDOS.forEach(s=>{const n=BRG[b][s]||0;if(n>max)max=n;}));
+  // Header row
+  let html=`<div class="h-row"><div class="h-cell head"></div>`;
+  BRG_SIDOS.forEach(s=>html+=`<div class="h-cell head">${s}</div>`);
+  html+=`</div>`;
+  // Each brand row
+  brands.forEach(b=>{
+    const row=BRG[b];
+    const brandMax=Math.max(...Object.values(row));
+    html+=`<div class="h-row"><div class="h-cell row-head">${b}</div>`;
+    BRG_SIDOS.forEach(s=>{
+      const n=row[s]||0;
+      const intensity=n>0?Math.pow(n/max,0.5):0;
+      const alpha=n>0?0.08+intensity*0.85:0.02;
+      const isPeak=n===brandMax&&n>0;
+      const txt=n>=max*0.3?Math.round(n/1000)+'K':'';
+      html+=`<div class="h-cell${isPeak?' peak':''}" style="background:rgba(184,72,43,${alpha})" title="${b} × ${s}: ${n.toLocaleString()}">${txt}</div>`;
+    });
+    html+=`</div>`;
+  });
+  w.innerHTML=html;
+}
+renderBRG();
+
+// TOP BRAND PER REGION
+function renderTop(){
+  const w=document.getElementById('topRegion');
+  TOP_REGION.forEach(([sido,top3])=>{
+    let cells='';
+    top3.forEach((t,i)=>{
+      cells+=`<div class="tr-cell r${i+1}"><span class="bn">${t[0]}</span><span class="nv">${fmt(t[1])}</span></div>`;
+    });
+    w.insertAdjacentHTML('beforeend',`<div class="tr-row"><div class="sido">${sido}</div>${cells}</div>`);
   });
 }
-renderQuestions();
-
+renderTop();
 </script>
 </body>
 </html>

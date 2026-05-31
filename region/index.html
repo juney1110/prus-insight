@@ -1,0 +1,428 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>PRUS Insight — Regional Intelligence</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT,WONK@9..144,300..900,0..100,0..1&family=Noto+Serif+KR:wght@300;400;600;700;900&family=IBM+Plex+Sans+KR:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<script src="../auth.js"></script>
+<style>
+  :root{--bg:#F4EFE6;--bg-alt:#EBE4D6;--ink:#1C1B17;--ink-2:#3D3A33;--muted:#857F70;--rule:#D6CFBE;--rule-2:#BFB8A4;--accent:#B8482B;--accent-2:#2A4F4B;--gold:#A2873D;--font-serif:"Fraunces","Noto Serif KR",Georgia,serif;--font-sans:"IBM Plex Sans KR",-apple-system,sans-serif;--font-mono:"JetBrains Mono",ui-monospace,monospace}
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--bg);color:var(--ink);font-family:var(--font-sans);line-height:1.5}
+  body{background-image:radial-gradient(ellipse at 12% -10%,rgba(184,72,43,0.07),transparent 45%),radial-gradient(ellipse at 88% 110%,rgba(42,79,75,0.06),transparent 55%);min-height:100vh;padding-bottom:6rem}
+  ::selection{background:var(--accent);color:var(--bg)}
+
+  .topbar{position:sticky;top:0;z-index:50;background:rgba(244,239,230,0.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--rule)}
+  .topbar-inner{max-width:1320px;margin:0 auto;padding:0.9rem 2rem;display:flex;align-items:center;justify-content:space-between;gap:2rem}
+  .brand{display:flex;align-items:baseline;gap:0.6rem;font-family:var(--font-serif);font-weight:600;font-size:1.15rem;letter-spacing:-0.01em}
+  a.brand{text-decoration:none;color:inherit}
+  .brand .back-arr{font-family:var(--font-mono);font-size:0.95rem;color:var(--muted);margin-right:0.15rem;transition:transform .25s,color .25s;display:inline-block}
+  a.brand:hover .back-arr{transform:translateX(-5px);color:var(--accent)}
+  a.brand:hover .mark{transform:translateY(1px) scale(1.2)}
+  .brand .mark{display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--accent);transform:translateY(1px);transition:transform .25s}
+  .brand small{font-family:var(--font-sans);font-weight:400;font-size:0.78rem;color:var(--muted);letter-spacing:0.04em;text-transform:uppercase;margin-left:0.4rem}
+  .crumb{font-family:var(--font-mono);font-size:0.7rem;color:var(--accent);letter-spacing:0.14em;text-transform:uppercase;margin-left:0.6rem;padding-left:0.6rem;border-left:1px solid var(--rule)}
+  .nav{display:flex;gap:1.4rem;font-size:0.8rem;color:var(--ink-2);letter-spacing:0.02em}
+  .nav a{color:inherit;text-decoration:none;border-bottom:1px solid transparent;padding-bottom:2px;transition:border-color .15s}
+  .nav a:hover{border-bottom-color:var(--accent)}
+  .badge-live{font-family:var(--font-mono);font-size:0.7rem;color:var(--accent);display:inline-flex;align-items:center;gap:0.4rem}
+  .badge-live::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 0 rgba(184,72,43,0.6);animation:pulse 2s infinite}
+  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(184,72,43,0.6)}70%{box-shadow:0 0 0 8px rgba(184,72,43,0)}100%{box-shadow:0 0 0 0 rgba(184,72,43,0)}}
+
+  main{max-width:1320px;margin:0 auto;padding:0 2rem}
+
+  .masthead{padding:5rem 0 3.5rem;border-bottom:1px solid var(--rule);display:grid;grid-template-columns:1.4fr 1fr;gap:4rem;align-items:end}
+  .masthead .eyebrow{font-family:var(--font-mono);font-size:0.72rem;color:var(--accent);letter-spacing:0.22em;text-transform:uppercase;margin-bottom:1.25rem}
+  .masthead h1{font-family:var(--font-serif);font-weight:300;font-size:clamp(3rem,6.4vw,5.6rem);line-height:0.96;letter-spacing:-0.035em;font-variation-settings:"opsz" 144,"SOFT" 30}
+  .masthead h1 em{font-style:italic;font-weight:400;color:var(--accent);font-variation-settings:"opsz" 144,"SOFT" 100,"WONK" 1}
+  .masthead .kicker{font-family:var(--font-serif);font-weight:400;font-size:1.1rem;color:var(--ink-2);margin-top:1.5rem;max-width:36ch;line-height:1.5;font-style:italic}
+  .masthead .right{border-left:1px solid var(--rule);padding-left:3rem}
+  .meta-list{display:flex;flex-direction:column;gap:0.9rem}
+  .meta-list dt{font-family:var(--font-mono);font-size:0.7rem;color:var(--muted);letter-spacing:0.12em;text-transform:uppercase}
+  .meta-list dd{font-family:var(--font-serif);font-weight:400;font-size:1.05rem;color:var(--ink);margin-top:0.15rem}
+
+  .stats-strip{display:grid;grid-template-columns:repeat(4,1fr);padding:2.5rem 0;border-bottom:1px solid var(--rule)}
+  .stat{padding:0 2rem;border-right:1px solid var(--rule)}
+  .stat:last-child{border-right:none}
+  .stat:first-child{padding-left:0}
+  .stat .label{font-family:var(--font-mono);font-size:0.7rem;color:var(--muted);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:0.8rem}
+  .stat .value{font-family:var(--font-serif);font-weight:400;font-size:clamp(2.2rem,3.8vw,3.4rem);line-height:1;letter-spacing:-0.02em;color:var(--ink);font-variation-settings:"opsz" 144}
+  .stat .unit{font-family:var(--font-sans);font-weight:400;font-size:0.95rem;color:var(--muted);margin-left:0.3rem}
+  .stat .delta{font-family:var(--font-mono);font-size:0.78rem;color:var(--accent-2);margin-top:0.6rem}
+
+  .section{padding:4rem 0;border-bottom:1px solid var(--rule)}
+  .section-head{display:grid;grid-template-columns:auto 1fr auto;gap:2rem;align-items:end;margin-bottom:2.5rem}
+  .section-head .num{font-family:var(--font-mono);font-size:0.78rem;color:var(--accent);letter-spacing:0.12em}
+  .section-head h2{font-family:var(--font-serif);font-weight:400;font-size:clamp(1.6rem,2.6vw,2.4rem);letter-spacing:-0.02em;line-height:1.1;font-variation-settings:"opsz" 60}
+  .section-head h2 em{font-style:italic;color:var(--accent);font-weight:400}
+  .section-head .lede{font-family:var(--font-serif);font-style:italic;color:var(--ink-2);font-size:0.95rem;max-width:38ch;text-align:right;line-height:1.4}
+
+  /* Regions list */
+  .regions{display:grid;grid-template-columns:1fr;border-top:1px solid var(--rule-2)}
+  .region-row{display:grid;grid-template-columns:180px 60px 1fr 90px 100px;gap:1.5rem;align-items:center;padding:0.85rem 0;border-bottom:1px solid var(--rule)}
+  .region-row .name{font-family:var(--font-serif);font-size:1.1rem}
+  .region-row .sites{font-family:var(--font-mono);font-size:0.78rem;color:var(--muted);text-align:right}
+  .region-row .bar-wrap{height:18px;background:var(--rule);position:relative;overflow:hidden}
+  .region-row .bar-wrap>span{position:absolute;left:0;top:0;height:100%;background:var(--accent-2)}
+  .region-row .n{font-family:var(--font-mono);font-size:0.88rem;text-align:right;color:var(--ink-2)}
+  .region-row .r{font-family:var(--font-serif);font-size:1.15rem;text-align:right;font-variation-settings:"opsz" 48}
+  .region-row .r.hi{color:var(--accent)}
+
+  /* Year x region trend chart */
+  .yr-chart{border:1px solid var(--rule);background:rgba(255,253,247,0.3);padding:1.5rem 1.5rem 1rem}
+  .yr-chart svg{display:block;width:100%;height:440px}
+  .yr-legend{display:flex;flex-wrap:wrap;gap:1rem 1.5rem;margin-top:1rem;font-family:var(--font-mono);font-size:0.72rem;color:var(--ink-2);justify-content:center}
+  .yr-legend > span{display:inline-flex;align-items:center;gap:0.4rem;cursor:pointer;opacity:0.8;transition:opacity .15s}
+  .yr-legend > span:hover{opacity:1}
+  .yr-legend i{width:14px;height:2px;display:inline-block}
+
+  /* Demand flow */
+  .flow-wrap{display:grid;grid-template-columns:1.3fr 1fr;gap:3rem;align-items:start}
+  .flow-table{border-top:1px solid var(--rule-2)}
+  .flow-row{display:grid;grid-template-columns:62px 1fr 22px 1fr 110px;align-items:center;gap:0.8rem;padding:0.7rem 0;border-bottom:1px solid var(--rule)}
+  .flow-row.head{font-family:var(--font-mono);font-size:0.7rem;color:var(--muted);letter-spacing:0.12em;text-transform:uppercase;border-bottom:1px solid var(--rule-2)}
+  .flow-row .rank{font-family:var(--font-mono);font-size:0.78rem;color:var(--muted)}
+  .flow-row .from{font-family:var(--font-serif);font-size:1.05rem;text-align:right}
+  .flow-row .arrow{text-align:center;color:var(--accent);font-family:var(--font-mono);font-size:1.1rem}
+  .flow-row .to{font-family:var(--font-serif);font-size:1.05rem}
+  .flow-row .vol{font-family:var(--font-mono);font-size:0.85rem;color:var(--ink-2);text-align:right;position:relative}
+  .flow-row .vbar{height:6px;background:var(--accent-2);opacity:0.4;margin-top:3px;display:block}
+  .flow-callouts{display:flex;flex-direction:column;gap:1.2rem}
+  .callout{padding:1.4rem 1.3rem;border:1px solid var(--rule);background:rgba(255,253,247,0.5)}
+  .callout .cnum{font-family:var(--font-serif);font-size:2.2rem;color:var(--accent);font-weight:300;font-variation-settings:"opsz" 96;line-height:1}
+  .callout .ctit{font-family:var(--font-serif);font-size:1.1rem;margin-top:0.5rem}
+  .callout .cbody{font-size:0.86rem;color:var(--ink-2);margin-top:0.5rem;line-height:1.5}
+
+  /* Top brand per region */
+  .top-region{border-top:1px solid var(--rule-2)}
+  .tr-row{display:grid;grid-template-columns:120px 1fr 1fr 1fr;gap:1.5rem;align-items:center;padding:1rem 0;border-bottom:1px solid var(--rule)}
+  .tr-row.head{font-family:var(--font-mono);font-size:0.7rem;color:var(--muted);letter-spacing:0.12em;text-transform:uppercase;padding:0.7rem 0;border-bottom:1px solid var(--rule-2)}
+  .tr-row .sido{font-family:var(--font-serif);font-size:1.25rem;font-variation-settings:"opsz" 48}
+  .tr-cell{display:flex;align-items:baseline;gap:0.5rem;padding:0.4rem 0.7rem;background:rgba(255,253,247,0.55);border-left:2px solid transparent}
+  .tr-cell.r1{border-left-color:var(--accent)}
+  .tr-cell.r2{border-left-color:var(--accent-2)}
+  .tr-cell.r3{border-left-color:var(--rule-2)}
+  .tr-cell .bn{font-family:var(--font-serif);font-size:1rem;flex:1}
+  .tr-cell .nv{font-family:var(--font-mono);font-size:0.78rem;color:var(--ink-2)}
+
+  /* Use cases */
+  .usecases{display:grid;grid-template-columns:repeat(3,1fr);gap:2rem}
+  .uc{padding:2rem 1.8rem;border:1px solid var(--rule);background:rgba(255,253,247,0.4);position:relative;transition:transform .2s,border-color .2s}
+  .uc:hover{transform:translateY(-3px);border-color:var(--accent)}
+  .uc .tag{font-family:var(--font-mono);font-size:0.7rem;color:var(--accent);letter-spacing:0.12em;text-transform:uppercase}
+  .uc h3{font-family:var(--font-serif);font-weight:400;font-size:1.5rem;letter-spacing:-0.015em;margin:0.7rem 0 0.6rem;line-height:1.15}
+  .uc h3 em{font-style:italic;color:var(--accent);font-weight:400}
+  .uc p{color:var(--ink-2);font-size:0.92rem;line-height:1.55}
+  .uc .price{position:absolute;bottom:1.5rem;right:1.5rem;font-family:var(--font-mono);font-size:0.75rem;color:var(--muted)}
+
+  footer{margin-top:4rem;padding:3rem 2rem 2rem;border-top:1px solid var(--rule);max-width:1320px;margin-left:auto;margin-right:auto;display:grid;grid-template-columns:1fr auto;gap:2rem;align-items:end;font-family:var(--font-mono);font-size:0.75rem;color:var(--muted)}
+  footer .mark{font-family:var(--font-serif);font-style:italic;color:var(--ink);font-size:1rem}
+
+  @media (max-width:1100px){
+    .masthead{grid-template-columns:1fr;gap:2rem}
+    .masthead .right{border-left:none;padding-left:0;border-top:1px solid var(--rule);padding-top:2rem}
+    .stats-strip{grid-template-columns:repeat(2,1fr);gap:1.5rem}
+    .stat{border-right:none}
+    .flow-wrap{grid-template-columns:1fr}
+    .tr-row{grid-template-columns:1fr;gap:0.5rem}
+    .usecases{grid-template-columns:1fr}
+    .region-row{grid-template-columns:100px 1fr 80px 70px;gap:0.8rem}
+    .region-row .sites{display:none}
+  }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="../index.html" title="포털 인덱스로 돌아가기">
+      <span class="back-arr">←</span>
+      <span class="mark"></span>
+      PRUS Insight
+      <small>Regional Intelligence</small>
+      <span class="crumb">Region</span>
+    </a>
+    <nav class="nav">
+      <a href="#kpi">KPI</a>
+      <a href="#trend">10-Year Trend</a>
+      <a href="#flow">Demand Flow</a>
+      <a href="#top">Regional #1</a>
+      <a href="#use">Pricing</a>
+    </nav>
+    <span class="badge-live">LIVE · 2026 Q2</span>
+  </div>
+</header>
+
+<main>
+
+<section class="masthead">
+  <div>
+    <div class="eyebrow">Category 03 · Regional Intelligence</div>
+    <h1>분양 시장의<br/><em>지도</em>를 그리다.</h1>
+    <p class="kicker">17개 시도 · 5,736 분양 현장 · 256만 응답자. 시도별 활동량·만족도·수요 흐름·시간 추이를 한 화면에.</p>
+  </div>
+  <aside class="right">
+    <dl class="meta-list">
+      <div><dt>Sido Coverage</dt><dd>17개 (광역시·도)</dd></div>
+      <div><dt>Largest Region</dt><dd>경기도 100만 응답 · 978 현장</dd></div>
+      <div><dt>Highest Satisfaction</dt><dd>인천 · 대전 (★ 3.25)</dd></div>
+      <div><dt>Time Window</dt><dd>2017 — 2026 (10년)</dd></div>
+    </dl>
+  </aside>
+</section>
+
+<section class="stats-strip">
+  <div class="stat"><div class="label">Total Responses</div><div class="value">2.56<span class="unit">M</span></div><div class="delta">17개 시도 전체</div></div>
+  <div class="stat"><div class="label">No.1 Region</div><div class="value">경기도</div><div class="delta">1,000,660 응답 (전체 39%)</div></div>
+  <div class="stat"><div class="label">Hottest 2024-25</div><div class="value">인천</div><div class="delta">2년간 응답 73K → 167%↑</div></div>
+  <div class="stat"><div class="label">Demand Flow #1</div><div class="value">서울→경기</div><div class="delta">16,194 (수도권 외곽 이주)</div></div>
+</section>
+
+<!-- 01 KPI -->
+<section class="section" id="kpi">
+  <div class="section-head">
+    <div class="num">01 / Regional KPI Table</div>
+    <h2>17개 시도 <em>활동·만족도</em><br/>지도</h2>
+    <div class="lede">현장수·응답수·평균 별점을 한 행에. 경기·인천·충남이 응답수 상위, 인천·대전이 만족도 상위.</div>
+  </div>
+  <div class="regions" id="regions">
+    <div class="region-row" style="border-bottom:1px solid var(--rule-2);padding-bottom:0.5rem;font-family:var(--font-mono);font-size:0.7rem;color:var(--muted);letter-spacing:0.12em;text-transform:uppercase">
+      <div>시도</div><div></div><div>응답수 분포</div><div style="text-align:right">응답</div><div style="text-align:right">★ 평균</div>
+    </div>
+  </div>
+</section>
+
+<!-- 02 YEAR x REGION TREND -->
+<section class="section" id="trend">
+  <div class="section-head">
+    <div class="num">02 / 10-Year Regional Trend</div>
+    <h2>시장 활동의 <em>지각변동</em><br/>대구 부상·인천 폭발</h2>
+    <div class="lede">2017~2026 시도별 응답수 라인. 마우스 오버 시 정확한 수치. 범례 클릭으로 라인 토글.</div>
+  </div>
+  <div class="yr-chart">
+    <svg id="trendSvg" viewBox="0 0 1100 440" preserveAspectRatio="none"></svg>
+    <div class="yr-legend" id="trendLegend"></div>
+  </div>
+</section>
+
+<!-- 03 DEMAND FLOW -->
+<section class="section" id="flow">
+  <div class="section-head">
+    <div class="num">03 / Demand Flow Map</div>
+    <h2>수요는 <em>어디서</em><br/>어디로 움직이나</h2>
+    <div class="lede">고객 주소 → 분양지 시도. 시도 간 이동 TOP 15.</div>
+  </div>
+  <div class="flow-wrap">
+    <div>
+      <div class="flow-table" id="flowTable">
+        <div class="flow-row head"><div class="rank">RANK</div><div class="from" style="text-align:right">거주지</div><div></div><div class="to">분양지</div><div class="vol" style="text-align:right">응답</div></div>
+      </div>
+    </div>
+    <div class="flow-callouts">
+      <div class="callout">
+        <div class="cnum">16,194</div>
+        <div class="ctit">서울 → 경기</div>
+        <div class="cbody">수도권 외곽 이주의 핵심 흐름. 김포·고양·남양주·하남·성남 분양 사업의 1차 타겟.</div>
+      </div>
+      <div class="callout">
+        <div class="cnum">9,264</div>
+        <div class="ctit">경북 → 경기</div>
+        <div class="cbody">지방→수도권 metro pull. 자녀 거주지 분양 검토 패턴 가능성. 광역 매체 집행 시 지역 가중에 활용.</div>
+      </div>
+      <div class="callout">
+        <div class="cnum">6,789 ↔ 5,430</div>
+        <div class="ctit">경기 ↔ 인천</div>
+        <div class="cbody">양방향 강한 흐름. 김포·계양·검단·서구 권역은 인천·경기 통합 수요 풀로 산정.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 04 TOP BRAND PER REGION -->
+<section class="section" id="top">
+  <div class="section-head">
+    <div class="num">04 / Regional #1 Brand</div>
+    <h2>각 시도의 <em>지배 브랜드</em><br/>TOP 3</h2>
+    <div class="lede">시도마다 강자가 다름. 서울=한양수자인 / 광주=대광로제비앙 / 경북=포레나.</div>
+  </div>
+  <div class="top-region" id="topRegion">
+    <div class="tr-row head"><div>시도</div><div>1위</div><div>2위</div><div>3위</div></div>
+  </div>
+</section>
+
+<!-- 05 USE CASES -->
+<section class="section" id="use">
+  <div class="section-head">
+    <div class="num">05 / Developer Subscription Tier</div>
+    <h2>시행사가 <em>왜</em><br/>이 데이터를 구독하는가</h2>
+    <div class="lede">신규 사업지 검토 · 수요 풀 추정 · 광역 매체 가중치 결정.</div>
+  </div>
+  <div class="usecases">
+    <div class="uc">
+      <div class="tag">USE 01 · SITE SCREENING</div>
+      <h3>신규 사업지 <em>검토</em></h3>
+      <p>관심 지역의 최근 5년 분양 흐름·만족도·수요 풀(거주지 매트릭스) 즉시 확인. 토지 매입 검토 단계 의사결정 자료.</p>
+      <div class="price">건당 ₩3,000,000~</div>
+    </div>
+    <div class="uc">
+      <div class="tag">USE 02 · CATCHMENT</div>
+      <h3>수요 풀 <em>추정</em></h3>
+      <p>분양지가 어느 거주지에서 응답을 끌어왔는지 정량 데이터. 미디어 플랜 시 지역 가중치 결정의 객관 근거.</p>
+      <div class="price">월 ₩1,500,000~</div>
+    </div>
+    <div class="uc">
+      <div class="tag">USE 03 · COMPETITION</div>
+      <h3>지역 <em>경쟁 강도</em></h3>
+      <p>같은 시기 같은 지역 진행 현장 수와 평균 별점. 분양 일정 의사결정 (서두를지/미룰지) 보조 지표.</p>
+      <div class="price">월 ₩1,200,000~</div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div><span class="mark">PRUS Insight</span> · Regional Intelligence Edition · 2017–2026 · 집계 단위 익명화</div>
+  <div>v0.2 · Region · 2026-05-31</div>
+</footer>
+
+<script>
+const REGIONS = [
+  ["경기도",        978,1000660,3.11],["대구광역시",    180, 277355,2.92],
+  ["인천광역시",    131, 200793,3.25],["충청남도",      170, 164066,3.11],
+  ["전라남도",       67, 104862,2.90],["경상북도",       67,  98986,2.86],
+  ["부산광역시",     87,  78147,3.05],["광주광역시",     64,  75498,2.88],
+  ["강원도",         79,  69098,2.83],["서울특별시",     99,  67433,3.17],
+  ["경상남도",       60,  57033,2.94],["대전광역시",     61,  52441,3.25],
+  ["전라북도",       37,  42677,2.73],["충청북도",       35,  37696,2.99],
+  ["제주특별자치도", 41,  16789,2.85],["세종특별자치시",  9,   8079,2.85],
+  ["울산광역시",      6,   4289,2.86],
+];
+
+// Year x Region trend (top 8 sido for clarity)
+const YR_TREND = {
+  "경기":[[2017,118785],[2018,148960],[2019,114152],[2020,96858],[2021,81869],[2022,61540],[2023,70904],[2024,113958],[2025,151984],[2026,58118]],
+  "대구":[[2017,11419],[2018,70842],[2019,72664],[2020,49991],[2021,33001],[2022,25793],[2023,5984],[2024,7803],[2025,3028]],
+  "인천":[[2017,14692],[2018,29521],[2019,30637],[2020,8296],[2021,10140],[2022,9958],[2023,22735],[2024,38801],[2025,34729],[2026,9721]],
+  "충남":[[2017,9226],[2018,6160],[2019,18458],[2020,17353],[2021,25999],[2022,26773],[2023,7637],[2024,18921],[2025,28983],[2026,11983]],
+  "서울":[[2017,31095],[2018,10813],[2019,20093],[2020,9071],[2021,1931],[2022,6618],[2023,5232],[2024,19548],[2025,3374],[2026,2250]],
+  "전남":[[2017,9249],[2018,18835],[2019,14428],[2020,15769],[2021,18561],[2022,16342],[2023,903],[2024,9988],[2025,788]],
+  "부산":[[2017,19882],[2018,7836],[2019,6522],[2020,2380],[2021,7342],[2022,2385],[2023,5310],[2024,11364],[2025,11791],[2026,3368]],
+  "대전":[[2017,3510],[2018,2926],[2019,3617],[2020,7504],[2021,8304],[2022,8345],[2023,2510],[2024,10504],[2025,4637],[2026,3294]],
+};
+const YR_COLORS = {"경기":"#B8482B","대구":"#2A4F4B","인천":"#A2873D","충남":"#7A9080","서울":"#C77B69","전남":"#857F70","부산":"#3D3A33","대전":"#A8B5A0"};
+
+const FLOWS = [
+  ["서울","대구",24574],["서울","경기",16194],["경북","경기",9264],
+  ["경기","인천",6789],["인천","경기",5430],["서울","충남",4888],
+  ["서울","광주",4580],["광주","경기",4017],["경남","경기",3205],
+  ["경북","인천",2829],["서울","인천",2679],["인천","충북",2447],
+  ["경남","부산",2239],["충남","경기",2221],["대전","충남",2132],
+];
+
+const TOP_REGION = [
+  ["경기", [["힐스테이트",91608],["자이",54873],["e편한세상",48816]]],
+  ["서울", [["한양수자인",11296],["아이파크",10789],["롯데캐슬",9937]]],
+  ["인천", [["e편한세상",20655],["푸르지오",20085],["힐스테이트",15901]]],
+  ["대구", [["힐스테이트",49016],["빌리브",14082],["동화 아이위시",10986]]],
+  ["부산", [["더샵",9527],["롯데캐슬",7938],["더조은몰",6380]]],
+  ["대전", [["힐스테이트",8643],["하늘채",8445],["e편한세상",4967]]],
+  ["광주", [["대광로제비앙",11322],["자이",7436],["모아엘가",5726]]],
+  ["충남", [["더샵",14686],["자이",14362],["힐스테이트",11628]]],
+  ["전남", [["자이",9007],["푸르지오",7502],["대성베르힐",7145]]],
+  ["경북", [["포레나",11022],["이편한세상",10440],["아이파크",9321]]],
+];
+
+function fmt(n){return n.toLocaleString('ko-KR')}
+
+// REGIONS table
+function renderRegions(){
+  const w=document.getElementById('regions');
+  const max=Math.max(...REGIONS.map(r=>r[2]));
+  REGIONS.forEach(([name,sites,cust,r])=>{
+    const pct=(cust/max*100).toFixed(1);
+    const hi=r>=3.2;
+    w.insertAdjacentHTML('beforeend',`
+      <div class="region-row">
+        <div class="name">${name}</div>
+        <div class="sites">${sites}현장</div>
+        <div class="bar-wrap"><span style="width:${pct}%"></span></div>
+        <div class="n">${fmt(cust)}</div>
+        <div class="r ${hi?'hi':''}">${r.toFixed(2)} ★</div>
+      </div>`);
+  });
+}
+renderRegions();
+
+// YEAR x REGION TREND (multi-line chart)
+function renderTrend(){
+  const svg=document.getElementById('trendSvg');
+  const W=1100,H=440,padL=58,padR=20,padT=20,padB=44;
+  const years=[2017,2018,2019,2020,2021,2022,2023,2024,2025,2026];
+  const sidos=Object.keys(YR_TREND);
+  let max=0; sidos.forEach(s=>YR_TREND[s].forEach(([y,n])=>{if(n>max)max=n;}));
+  // Round max up
+  max=Math.ceil(max/20000)*20000;
+  const xS=y=>padL+(y-years[0])/(years[years.length-1]-years[0])*(W-padL-padR);
+  const yS=n=>padT+(1-n/max)*(H-padT-padB);
+  let html='';
+  // Grid
+  for(let i=0;i<=5;i++){
+    const v=max*(5-i)/5;
+    const y=padT+(i/5)*(H-padT-padB);
+    html+=`<line x1="${padL}" y1="${y}" x2="${W-padR}" y2="${y}" stroke="#D6CFBE" stroke-width="0.5"/>`;
+    html+=`<text x="${padL-8}" y="${y+3}" text-anchor="end" font-family="JetBrains Mono" font-size="10" fill="#857F70">${(v/1000).toFixed(0)}K</text>`;
+  }
+  // X labels
+  years.forEach(y=>{
+    html+=`<text x="${xS(y)}" y="${H-padB+20}" text-anchor="middle" font-family="JetBrains Mono" font-size="10" fill="#3D3A33">${y}</text>`;
+  });
+  // Lines
+  sidos.forEach(s=>{
+    const data=YR_TREND[s];
+    const pts=data.map(([y,n])=>[xS(y),yS(n)]);
+    const path='M '+pts.map(p=>p.join(',')).join(' L ');
+    html+=`<path d="${path}" stroke="${YR_COLORS[s]}" stroke-width="1.8" fill="none" opacity="0.85" data-sido="${s}"/>`;
+    pts.forEach(p=>html+=`<circle cx="${p[0]}" cy="${p[1]}" r="3" fill="${YR_COLORS[s]}" opacity="0.85"/>`);
+  });
+  svg.innerHTML=html;
+  // Legend
+  const lg=document.getElementById('trendLegend');
+  sidos.forEach(s=>lg.insertAdjacentHTML('beforeend',`<span><i style="background:${YR_COLORS[s]}"></i>${s}</span>`));
+}
+renderTrend();
+
+// FLOWS
+function renderFlow(){
+  const max=Math.max(...FLOWS.map(f=>f[2]));
+  const w=document.getElementById('flowTable');
+  FLOWS.forEach((f,i)=>{
+    const [from,to,n]=f, p=(n/max)*100;
+    w.insertAdjacentHTML('beforeend',`
+      <div class="flow-row">
+        <div class="rank">${String(i+1).padStart(2,'0')}</div>
+        <div class="from">${from}</div>
+        <div class="arrow">→</div>
+        <div class="to">${to}</div>
+        <div class="vol">${fmt(n)}<span class="vbar" style="width:${p}%"></span></div>
+      </div>`);
+  });
+}
+renderFlow();
+
+// TOP REGION
+function renderTop(){
+  const w=document.getElementById('topRegion');
+  TOP_REGION.forEach(([sido,top3])=>{
+    let cells='';
+    top3.forEach((t,i)=>cells+=`<div class="tr-cell r${i+1}"><span class="bn">${t[0]}</span><span class="nv">${fmt(t[1])}</span></div>`);
+    w.insertAdjacentHTML('beforeend',`<div class="tr-row"><div class="sido">${sido}</div>${cells}</div>`);
+  });
+}
+renderTop();
+</script>
+</body>
+</html>

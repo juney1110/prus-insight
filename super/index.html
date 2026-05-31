@@ -1,0 +1,431 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>PRUS Insight — Super Visitors</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT,WONK@9..144,300..900,0..100,0..1&family=Noto+Serif+KR:wght@300;400;600;700;900&family=IBM+Plex+Sans+KR:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<script src="../auth.js"></script>
+<style>
+  :root{--bg:#F4EFE6;--bg-alt:#EBE4D6;--ink:#1C1B17;--ink-2:#3D3A33;--muted:#857F70;--rule:#D6CFBE;--rule-2:#BFB8A4;--accent:#B8482B;--accent-2:#2A4F4B;--gold:#A2873D;--font-serif:"Fraunces","Noto Serif KR",Georgia,serif;--font-sans:"IBM Plex Sans KR",-apple-system,sans-serif;--font-mono:"JetBrains Mono",ui-monospace,monospace}
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--bg);color:var(--ink);font-family:var(--font-sans);line-height:1.5}
+  body{background-image:radial-gradient(ellipse at 12% -10%,rgba(184,72,43,0.07),transparent 45%),radial-gradient(ellipse at 88% 110%,rgba(42,79,75,0.06),transparent 55%);min-height:100vh;padding-bottom:6rem}
+  ::selection{background:var(--accent);color:var(--bg)}
+
+  .topbar{position:sticky;top:0;z-index:50;background:rgba(244,239,230,0.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--rule)}
+  .topbar-inner{max-width:1320px;margin:0 auto;padding:0.9rem 2rem;display:flex;align-items:center;justify-content:space-between;gap:2rem}
+  .brand{display:flex;align-items:baseline;gap:0.6rem;font-family:var(--font-serif);font-weight:600;font-size:1.15rem;letter-spacing:-0.01em}
+  a.brand{text-decoration:none;color:inherit}
+  .brand .back-arr{font-family:var(--font-mono);font-size:0.95rem;color:var(--muted);margin-right:0.15rem;transition:transform .25s,color .25s;display:inline-block}
+  a.brand:hover .back-arr{transform:translateX(-5px);color:var(--accent)}
+  a.brand:hover .mark{transform:translateY(1px) scale(1.2)}
+  .brand .mark{display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--accent);transform:translateY(1px);transition:transform .25s}
+  .brand small{font-family:var(--font-sans);font-weight:400;font-size:0.78rem;color:var(--muted);letter-spacing:0.04em;text-transform:uppercase;margin-left:0.4rem}
+  .crumb{font-family:var(--font-mono);font-size:0.7rem;color:var(--accent);letter-spacing:0.14em;text-transform:uppercase;margin-left:0.6rem;padding-left:0.6rem;border-left:1px solid var(--rule)}
+  .nav{display:flex;gap:1.4rem;font-size:0.8rem;color:var(--ink-2);letter-spacing:0.02em}
+  .nav a{color:inherit;text-decoration:none;border-bottom:1px solid transparent;padding-bottom:2px;transition:border-color .15s}
+  .nav a:hover{border-bottom-color:var(--accent)}
+  .badge-live{font-family:var(--font-mono);font-size:0.7rem;color:var(--accent);display:inline-flex;align-items:center;gap:0.4rem}
+  .badge-live::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 0 rgba(184,72,43,0.6);animation:pulse 2s infinite}
+  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(184,72,43,0.6)}70%{box-shadow:0 0 0 8px rgba(184,72,43,0)}100%{box-shadow:0 0 0 0 rgba(184,72,43,0)}}
+
+  main{max-width:1320px;margin:0 auto;padding:0 2rem}
+
+  .masthead{padding:5rem 0 3.5rem;border-bottom:1px solid var(--rule);display:grid;grid-template-columns:1.4fr 1fr;gap:4rem;align-items:end}
+  .masthead .eyebrow{font-family:var(--font-mono);font-size:0.72rem;color:var(--accent);letter-spacing:0.22em;text-transform:uppercase;margin-bottom:1.25rem}
+  .masthead h1{font-family:var(--font-serif);font-weight:300;font-size:clamp(3rem,6.4vw,5.6rem);line-height:0.96;letter-spacing:-0.035em;font-variation-settings:"opsz" 144,"SOFT" 30}
+  .masthead h1 em{font-style:italic;font-weight:400;color:var(--accent);font-variation-settings:"opsz" 144,"SOFT" 100,"WONK" 1}
+  .masthead .kicker{font-family:var(--font-serif);font-weight:400;font-size:1.1rem;color:var(--ink-2);margin-top:1.5rem;max-width:36ch;line-height:1.5;font-style:italic}
+  .masthead .right{border-left:1px solid var(--rule);padding-left:3rem}
+  .meta-list{display:flex;flex-direction:column;gap:0.9rem}
+  .meta-list dt{font-family:var(--font-mono);font-size:0.7rem;color:var(--muted);letter-spacing:0.12em;text-transform:uppercase}
+  .meta-list dd{font-family:var(--font-serif);font-weight:400;font-size:1.05rem;color:var(--ink);margin-top:0.15rem}
+
+  .stats-strip{display:grid;grid-template-columns:repeat(4,1fr);padding:2.5rem 0;border-bottom:1px solid var(--rule)}
+  .stat{padding:0 2rem;border-right:1px solid var(--rule)}
+  .stat:last-child{border-right:none}
+  .stat:first-child{padding-left:0}
+  .stat .label{font-family:var(--font-mono);font-size:0.7rem;color:var(--muted);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:0.8rem}
+  .stat .value{font-family:var(--font-serif);font-weight:400;font-size:clamp(2.2rem,3.8vw,3.4rem);line-height:1;letter-spacing:-0.02em;color:var(--ink);font-variation-settings:"opsz" 144}
+  .stat .unit{font-family:var(--font-sans);font-weight:400;font-size:0.95rem;color:var(--muted);margin-left:0.3rem}
+  .stat .delta{font-family:var(--font-mono);font-size:0.78rem;color:var(--accent-2);margin-top:0.6rem}
+
+  .section{padding:4rem 0;border-bottom:1px solid var(--rule)}
+  .section-head{display:grid;grid-template-columns:auto 1fr auto;gap:2rem;align-items:end;margin-bottom:2.5rem}
+  .section-head .num{font-family:var(--font-mono);font-size:0.78rem;color:var(--accent);letter-spacing:0.12em}
+  .section-head h2{font-family:var(--font-serif);font-weight:400;font-size:clamp(1.6rem,2.6vw,2.4rem);letter-spacing:-0.02em;line-height:1.1;font-variation-settings:"opsz" 60}
+  .section-head h2 em{font-style:italic;color:var(--accent);font-weight:400}
+  .section-head .lede{font-family:var(--font-serif);font-style:italic;color:var(--ink-2);font-size:0.95rem;max-width:38ch;text-align:right;line-height:1.4}
+
+  /* Super visitor distribution chart */
+  .super-wrap{display:grid;grid-template-columns:1.2fr 1fr;gap:3rem;align-items:center}
+  .super-chart{border:1px solid var(--rule);padding:2rem 1.5rem;background:rgba(255,253,247,0.4)}
+  .super-chart svg{width:100%;height:280px;display:block}
+  .super-stats{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+  .superbox{padding:1.2rem;background:var(--bg-alt);border-radius:2px}
+  .superbox .sn{font-family:var(--font-serif);font-size:2.2rem;font-weight:300;color:var(--ink);font-variation-settings:"opsz" 96;line-height:1}
+  .superbox .sl{font-family:var(--font-mono);font-size:0.7rem;color:var(--muted);letter-spacing:0.1em;margin-top:0.4rem;text-transform:uppercase}
+  .superbox .sb{font-size:0.85rem;color:var(--ink-2);margin-top:0.6rem;line-height:1.4}
+  .superbox.alert{background:rgba(184,72,43,0.08);border-left:3px solid var(--accent)}
+  .superbox.alert .sn{color:var(--accent)}
+
+  /* Brand affinity */
+  .brand-affinity{border-top:1px solid var(--rule-2)}
+  .ba-row{display:grid;grid-template-columns:32px 1.3fr 1fr 90px 80px;gap:1rem;align-items:center;padding:0.85rem 0;border-bottom:1px solid var(--rule)}
+  .ba-row.head{font-family:var(--font-mono);font-size:0.7rem;color:var(--muted);letter-spacing:0.12em;text-transform:uppercase;padding:0.7rem 0;border-bottom:1px solid var(--rule-2)}
+  .ba-row .rank{font-family:var(--font-mono);font-size:0.8rem;color:var(--muted)}
+  .ba-row .brand-n{font-family:var(--font-serif);font-size:1.1rem;font-variation-settings:"opsz" 36}
+  .ba-row .barv{height:14px;background:var(--rule);position:relative;overflow:hidden}
+  .ba-row .barv > span{position:absolute;left:0;top:0;height:100%;background:var(--accent-2)}
+  .ba-row .visits{font-family:var(--font-mono);font-size:0.85rem;text-align:right}
+  .ba-row .r{font-family:var(--font-serif);font-size:1.1rem;text-align:right;color:var(--ink-2)}
+  .ba-row .r.hi{color:var(--accent)}
+
+  /* Region affinity */
+  .region-affinity{display:grid;grid-template-columns:repeat(2,1fr);gap:0.8rem}
+  .reg-card{padding:1.3rem 1.4rem;background:rgba(255,253,247,0.55);border:1px solid var(--rule);display:flex;align-items:center;justify-content:space-between}
+  .reg-card.hi{border-color:var(--accent);background:rgba(184,72,43,0.04)}
+  .reg-card .lblside{display:flex;flex-direction:column;gap:0.2rem}
+  .reg-card .sname{font-family:var(--font-serif);font-size:1.3rem;font-variation-settings:"opsz" 48}
+  .reg-card .scnt{font-family:var(--font-mono);font-size:0.72rem;color:var(--muted);letter-spacing:0.05em}
+  .reg-card .nbig{font-family:var(--font-serif);font-size:2rem;font-weight:300;color:var(--accent);font-variation-settings:"opsz" 96}
+
+  /* Rating comparison */
+  .rating-comp{display:grid;grid-template-columns:1fr 1fr;gap:2rem;margin-top:0;align-items:start}
+  .rc-card{padding:2rem 1.8rem;border:1px solid var(--rule);background:rgba(255,253,247,0.55)}
+  .rc-card h3{font-family:var(--font-serif);font-weight:400;font-size:1.5rem;letter-spacing:-0.015em;margin-bottom:1.5rem;font-variation-settings:"opsz" 60}
+  .rc-card.alert{border-color:var(--accent);background:rgba(184,72,43,0.04)}
+  .rc-bars{display:flex;flex-direction:column;gap:0.6rem}
+  .rc-bar-row{display:grid;grid-template-columns:60px 1fr 80px;gap:0.7rem;align-items:center}
+  .rc-bar-row .star{font-family:var(--font-mono);font-size:0.85rem;text-align:right;color:var(--muted)}
+  .rc-bar-row .bv{height:18px;background:var(--rule);position:relative;overflow:hidden}
+  .rc-bar-row .bv > span{position:absolute;left:0;top:0;height:100%;background:var(--accent-2)}
+  .rc-bar-row .pct{font-family:var(--font-mono);font-size:0.78rem;text-align:right;color:var(--ink-2)}
+  .rc-card.alert .rc-bar-row .bv > span{background:var(--accent)}
+  .rc-card .avg-line{font-family:var(--font-serif);font-style:italic;font-size:0.95rem;color:var(--ink-2);margin-top:1.4rem;padding-top:1.2rem;border-top:1px dashed var(--rule)}
+  .rc-card .avg-line strong{color:var(--accent);font-style:normal;font-weight:600}
+
+  /* Use cases */
+  .usecases{display:grid;grid-template-columns:repeat(3,1fr);gap:2rem}
+  .uc{padding:2rem 1.8rem;border:1px solid var(--rule);background:rgba(255,253,247,0.4);position:relative;transition:transform .2s,border-color .2s}
+  .uc:hover{transform:translateY(-3px);border-color:var(--accent)}
+  .uc .tag{font-family:var(--font-mono);font-size:0.7rem;color:var(--accent);letter-spacing:0.12em;text-transform:uppercase}
+  .uc h3{font-family:var(--font-serif);font-weight:400;font-size:1.5rem;letter-spacing:-0.015em;margin:0.7rem 0 0.6rem;line-height:1.15}
+  .uc h3 em{font-style:italic;color:var(--accent);font-weight:400}
+  .uc p{color:var(--ink-2);font-size:0.92rem;line-height:1.55}
+  .uc .price{position:absolute;bottom:1.5rem;right:1.5rem;font-family:var(--font-mono);font-size:0.75rem;color:var(--muted)}
+
+  /* Privacy note */
+  .privacy{padding:2rem 2rem;background:var(--bg-alt);border-left:3px solid var(--accent-2);margin-bottom:2rem}
+  .privacy h3{font-family:var(--font-serif);font-size:1.2rem;font-weight:400;margin-bottom:0.6rem}
+  .privacy p{font-size:0.88rem;color:var(--ink-2);line-height:1.55}
+
+  footer{margin-top:4rem;padding:3rem 2rem 2rem;border-top:1px solid var(--rule);max-width:1320px;margin-left:auto;margin-right:auto;display:grid;grid-template-columns:1fr auto;gap:2rem;align-items:end;font-family:var(--font-mono);font-size:0.75rem;color:var(--muted)}
+  footer .mark{font-family:var(--font-serif);font-style:italic;color:var(--ink);font-size:1rem}
+
+  @media (max-width:1100px){
+    .masthead{grid-template-columns:1fr;gap:2rem}
+    .masthead .right{border-left:none;padding-left:0;border-top:1px solid var(--rule);padding-top:2rem}
+    .stats-strip{grid-template-columns:repeat(2,1fr);gap:1.5rem}
+    .stat{border-right:none}
+    .super-wrap{grid-template-columns:1fr}
+    .region-affinity{grid-template-columns:1fr}
+    .rating-comp{grid-template-columns:1fr}
+    .usecases{grid-template-columns:1fr}
+  }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="../index.html" title="포털 인덱스로 돌아가기">
+      <span class="back-arr">←</span>
+      <span class="mark"></span>
+      PRUS Insight
+      <small>Super Visitor Intelligence</small>
+      <span class="crumb">Super</span>
+    </a>
+    <nav class="nav">
+      <a href="#dist">Distribution</a>
+      <a href="#brand">Brand Affinity</a>
+      <a href="#region">Region</a>
+      <a href="#rating">Rating</a>
+      <a href="#use">Pricing</a>
+    </nav>
+    <span class="badge-live">LIVE · 2026 Q2</span>
+  </div>
+</header>
+
+<main>
+
+<section class="masthead">
+  <div>
+    <div class="eyebrow">Category 04 · Super Visitor Intelligence</div>
+    <h1>10년간 시장을<br/>읽고 있는<br/><em>5,447명</em>.</h1>
+    <p class="kicker">10개 이상 분양 부스를 방문한 진성 매수 시그널. 최고 1명은 183개 현장 방문. 시장 전체를 모니터링하는 프로 매수 그룹.</p>
+  </div>
+  <aside class="right">
+    <dl class="meta-list">
+      <div><dt>Definition</dt><dd>같은 휴대폰 10+ 현장 응답</dd></div>
+      <div><dt>Total Supers</dt><dd>5,447명 (전체 휴대폰의 0.28%)</dd></div>
+      <div><dt>Avg Sites Visited</dt><dd>14.7개</dd></div>
+      <div><dt>Max</dt><dd>183개 현장 (1명)</dd></div>
+    </dl>
+  </aside>
+</section>
+
+<section class="stats-strip">
+  <div class="stat"><div class="label">Super Visitors</div><div class="value">5,447<span class="unit">명</span></div><div class="delta">10+ 현장 응답자</div></div>
+  <div class="stat"><div class="label">Ultra Tier</div><div class="value">213<span class="unit">명</span></div><div class="delta">30+ 현장 (집중 모니터링)</div></div>
+  <div class="stat"><div class="label">Most Visited Brand</div><div class="value">힐스테이트</div><div class="delta">4,092명 슈퍼 · 8,805 방문</div></div>
+  <div class="stat"><div class="label">Top Region</div><div class="value">대구</div><div class="delta">2,085명 슈퍼 · 27,892 방문</div></div>
+</section>
+
+<!-- PRIVACY NOTE -->
+<div class="privacy">
+  <h3>데이터 처리 원칙</h3>
+  <p>모든 슈퍼방문자 분석은 <strong>휴대폰 번호 단위 집계</strong>로만 산출됩니다. 개인 식별 정보(이름·실전화번호·주소)는 외부 공개·구독자 노출 모두 차단되며, 본 페이지는 <strong>집계 통계만</strong> 제공합니다. 구독 상품에서도 개별 식별 데이터는 제공되지 않습니다.</p>
+</div>
+
+<!-- 01 DISTRIBUTION -->
+<section class="section" id="dist">
+  <div class="section-head">
+    <div class="num">01 / Visit Distribution</div>
+    <h2>전체 분포 vs <em>슈퍼 그룹</em></h2>
+    <div class="lede">192만 단일 휴대폰 중 99.7%는 1~9개 방문. 0.28% (5,447명)이 슈퍼 그룹.</div>
+  </div>
+  <div class="super-wrap">
+    <div class="super-chart">
+      <svg id="superSvg" viewBox="0 0 720 280" preserveAspectRatio="none"></svg>
+      <div style="margin-top:0.5rem;text-align:right;font-family:var(--font-mono);font-size:0.7rem;color:var(--muted)">방문 현장수 별 인원 분포 · 로그 스케일</div>
+    </div>
+    <div class="super-stats">
+      <div class="superbox"><div class="sn">1.6M</div><div class="sl">SINGLE-TOUCH</div><div class="sb">1회만 응답. 일회성 관심층.</div></div>
+      <div class="superbox"><div class="sn">287K</div><div class="sl">LIGHT SHOPPERS</div><div class="sb">2~4개 방문. 옵션 비교 중인 활성 잠재고객.</div></div>
+      <div class="superbox alert"><div class="sn">5,447</div><div class="sl">SUPER VISITORS</div><div class="sb">10개+ 방문. 진성 매수자/투자자/업계 후보.</div></div>
+      <div class="superbox alert"><div class="sn">213</div><div class="sl">ULTRA · 30+</div><div class="sb">최고 183개 방문 1명. 시장 전체 모니터링.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- 02 BRAND AFFINITY -->
+<section class="section" id="brand">
+  <div class="section-head">
+    <div class="num">02 / Brand Affinity (Super Group)</div>
+    <h2>슈퍼방문자가<br/>가장 많이 본 <em>브랜드</em></h2>
+    <div class="lede">5,447명 슈퍼방문자 행동에서 도출. 브랜드별 슈퍼 방문 수와 슈퍼들의 평균 별점.</div>
+  </div>
+  <div class="brand-affinity" id="baTable">
+    <div class="ba-row head">
+      <div></div><div>BRAND</div><div>방문 분포</div>
+      <div style="text-align:right">슈퍼 방문</div><div style="text-align:right">★ 슈퍼</div>
+    </div>
+  </div>
+</section>
+
+<!-- 03 REGION -->
+<section class="section" id="region">
+  <div class="section-head">
+    <div class="num">03 / Regional Concentration</div>
+    <h2>슈퍼방문자의 <em>지리적 집중</em><br/>대구가 1위</h2>
+    <div class="lede">슈퍼방문자 분양지 시도 분포. 대구 27,892 방문으로 경기 24,959를 앞섬 — 한국 분양시장의 가장 활발한 슈퍼 매수 활동 지역.</div>
+  </div>
+  <div class="region-affinity" id="regAff"></div>
+</section>
+
+<!-- 04 RATING COMPARISON -->
+<section class="section" id="rating">
+  <div class="section-head">
+    <div class="num">04 / Rating Behavior</div>
+    <h2>슈퍼방문자는 <em>더 까다로운가?</em></h2>
+    <div class="lede">전체 응답자 vs 슈퍼방문자의 별점 분포 비교. 슈퍼방문자가 평균 별점이 약간 더 높음 (시장에 익숙해서 너그러움?).</div>
+  </div>
+  <div class="rating-comp">
+    <div class="rc-card">
+      <h3>전체 응답자 (2.5M)</h3>
+      <div class="rc-bars" id="allBars"></div>
+      <div class="avg-line">평균 별점 <strong>3.04</strong></div>
+    </div>
+    <div class="rc-card alert">
+      <h3>슈퍼방문자 (66,260 응답)</h3>
+      <div class="rc-bars" id="superBars"></div>
+      <div class="avg-line">평균 별점 <strong>3.08</strong> &nbsp; · &nbsp; ★1 비율 1.4% (전체 1.5%) · ★4 비율 18.5% (전체 16.4%)</div>
+    </div>
+  </div>
+</section>
+
+<!-- 05 USE CASES -->
+<section class="section" id="use">
+  <div class="section-head">
+    <div class="num">05 / Agency &amp; Advanced Subscription</div>
+    <h2>이 데이터는 <em>누구</em>에게<br/>가치 있는가</h2>
+    <div class="lede">광고대행사·분양대행사·시행사의 진성 매수 시그널 활용.</div>
+  </div>
+  <div class="usecases">
+    <div class="uc">
+      <div class="tag">USE 01 · AGENCY TARGETING</div>
+      <h3>광고대행사 <em>타겟 인사이트</em></h3>
+      <p>슈퍼 방문자의 브랜드·지역·평형·연령 선호 집계. 광고 채널·메시지 설계 의사결정. (개별 식별 정보 미제공)</p>
+      <div class="price">월 ₩1,800,000~</div>
+    </div>
+    <div class="uc">
+      <div class="tag">USE 02 · MARKET PULSE</div>
+      <h3>시장 활성도 <em>조기 시그널</em></h3>
+      <p>슈퍼방문자의 월별 활동량 추세는 시장 모멘텀 선행 지표. 6개월 후 분양 성수기 예측에 활용 가능.</p>
+      <div class="price">월 ₩2,500,000~</div>
+    </div>
+    <div class="uc">
+      <div class="tag">USE 03 · ANTI-FRAUD</div>
+      <h3>이상 응답 <em>탐지</em></h3>
+      <p>같은 휴대폰이 단기간 다중 응답 시 알바·스팸 가능성. 자사 현장 데이터 품질 검증 보조 도구.</p>
+      <div class="price">월 ₩600,000~</div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div><span class="mark">PRUS Insight</span> · Super Visitor Intelligence · 2017–2026 · 집계 단위 익명화 · 개인식별정보 미노출</div>
+  <div>v0.2 · Super · 2026-05-31</div>
+</footer>
+
+<script>
+const SUPER = [
+  ["1",      1603819],["2-4",     287062],["5-9",      27501],
+  ["10-19",     4691],["20-29",      540],["30+",        213],
+];
+const SUPER_BRANDS = [
+  ["힐스테이트", 8805, 4092, 3.05],
+  ["자이",      3869, 2550, 3.26],
+  ["e편한세상", 2895, 1838, 3.20],
+  ["푸르지오",  2478, 1924, 3.19],
+  ["더샵",      2310, 1724, 2.94],
+  ["제일풍경채",1990, 1626, 3.12],
+  ["호반써밋",  1888, 1347, 3.39],
+  ["롯데캐슬",  1707, 1169, 3.08],
+  ["대광로제비앙",1693,1215,2.99],
+  ["데시앙",    1274,  990, 3.11],
+  ["아이파크",  1260,  915, 2.99],
+  ["골드클래스",1244,  995, 2.82],
+  ["우방 아이유쉘",1152,998,2.92],
+  ["빌리브",    1147,  877, 2.82],
+  ["자이르네",  1100,  851, 3.68],
+];
+const SUPER_REGIONS = [
+  ["대구", 27892, 2085, true],
+  ["경기", 24959, 2257, true],
+  ["충남",  8243,  892, false],
+  ["인천",  5758,  967, false],
+  ["광주",  3565,  320, false],
+  ["전남",  2616,  414, false],
+  ["대전",  2078,  202, false],
+  ["경북",  1965,  729, false],
+  ["서울",  1513,  592, false],
+  ["부산",   284,   55, false],
+];
+
+// Rating: counts (super) vs % (all)
+const RATING_ALL = {1:37813, 2:220672, 3:1513523, 4:417356}; // from 피알어스_고객
+const RATING_SUPER = {1:924, 2:5359, 3:47747, 4:12230};
+
+function fmt(n){return n.toLocaleString('ko-KR')}
+function fmtK(n){if(n>=1e6)return (n/1e6).toFixed(2)+'M';if(n>=1e3)return (n/1e3).toFixed(0)+'K';return n}
+
+// DISTRIBUTION
+function renderSuper(){
+  const svg=document.getElementById('superSvg');
+  const W=720,H=280,padL=70,padR=20,padT=20,padB=50;
+  const data=SUPER;
+  const maxLog=Math.log10(Math.max(...data.map(d=>d[1])));
+  const minLog=1;
+  const barW=(W-padL-padR)/data.length*0.65;
+  const gap=(W-padL-padR)/data.length;
+  let html='';
+  for(let p=1;p<=Math.ceil(maxLog);p++){
+    const v=Math.pow(10,p);
+    const y=padT+(1-(p-minLog)/(maxLog-minLog))*(H-padT-padB);
+    html+=`<line x1="${padL}" y1="${y}" x2="${W-padR}" y2="${y}" stroke="#D6CFBE" stroke-width="0.6"/>`;
+    html+=`<text x="${padL-10}" y="${y+3}" text-anchor="end" font-family="JetBrains Mono" font-size="9" fill="#857F70">${fmtK(v)}</text>`;
+  }
+  data.forEach((d,i)=>{
+    const x=padL+gap*i+(gap-barW)/2;
+    const logV=Math.log10(d[1]);
+    const y=padT+(1-(logV-minLog)/(maxLog-minLog))*(H-padT-padB);
+    const h=H-padB-y;
+    const isAlert=d[0]==='10-19'||d[0]==='20-29'||d[0]==='30+';
+    html+=`<rect x="${x}" y="${y}" width="${barW}" height="${h}" fill="${isAlert?'#B8482B':'#2A4F4B'}" opacity="${isAlert?0.9:0.55}"/>`;
+    html+=`<text x="${x+barW/2}" y="${y-6}" text-anchor="middle" font-family="JetBrains Mono" font-size="10" fill="${isAlert?'#B8482B':'#3D3A33'}">${fmt(d[1])}</text>`;
+    html+=`<text x="${x+barW/2}" y="${H-padB+18}" text-anchor="middle" font-family="JetBrains Mono" font-size="10" fill="#3D3A33">${d[0]}</text>`;
+    html+=`<text x="${x+barW/2}" y="${H-padB+32}" text-anchor="middle" font-family="IBM Plex Sans KR" font-size="9" fill="#857F70">현장</text>`;
+  });
+  svg.innerHTML=html;
+}
+renderSuper();
+
+// BRAND AFFINITY
+function renderBA(){
+  const w=document.getElementById('baTable');
+  const max=Math.max(...SUPER_BRANDS.map(b=>b[1]));
+  SUPER_BRANDS.forEach((b,i)=>{
+    const [n,visits,uniqs,r]=b;
+    const pct=(visits/max*100).toFixed(0);
+    w.insertAdjacentHTML('beforeend',`
+      <div class="ba-row">
+        <div class="rank">${String(i+1).padStart(2,'0')}</div>
+        <div class="brand-n">${n}</div>
+        <div class="barv"><span style="width:${pct}%"></span></div>
+        <div class="visits">${fmt(visits)}<br/><span style="font-size:0.65rem;color:#857F70">${fmt(uniqs)}명</span></div>
+        <div class="r ${r>=3.3?'hi':''}">${r.toFixed(2)}</div>
+      </div>`);
+  });
+}
+renderBA();
+
+// REGION AFFINITY
+function renderReg(){
+  const w=document.getElementById('regAff');
+  SUPER_REGIONS.forEach(([sido,visits,uniqs,hi])=>{
+    w.insertAdjacentHTML('beforeend',`
+      <div class="reg-card ${hi?'hi':''}">
+        <div class="lblside">
+          <div class="sname">${sido}</div>
+          <div class="scnt">${fmt(uniqs)}명 슈퍼방문자</div>
+        </div>
+        <div class="nbig">${fmtK(visits)}</div>
+      </div>`);
+  });
+}
+renderReg();
+
+// RATING COMPARISON BARS
+function renderRating(){
+  const allTotal = Object.values(RATING_ALL).reduce((s,v)=>s+v,0);
+  const superTotal = Object.values(RATING_SUPER).reduce((s,v)=>s+v,0);
+  const allWrap=document.getElementById('allBars');
+  const superWrap=document.getElementById('superBars');
+  [4,3,2,1].forEach(star=>{
+    const aPct=(RATING_ALL[star]/allTotal*100);
+    const sPct=(RATING_SUPER[star]/superTotal*100);
+    allWrap.insertAdjacentHTML('beforeend',`
+      <div class="rc-bar-row">
+        <div class="star">★${star}</div>
+        <div class="bv"><span style="width:${aPct}%"></span></div>
+        <div class="pct">${aPct.toFixed(1)}%</div>
+      </div>`);
+    superWrap.insertAdjacentHTML('beforeend',`
+      <div class="rc-bar-row">
+        <div class="star">★${star}</div>
+        <div class="bv"><span style="width:${sPct}%"></span></div>
+        <div class="pct">${sPct.toFixed(1)}%</div>
+      </div>`);
+  });
+}
+renderRating();
+</script>
+</body>
+</html>

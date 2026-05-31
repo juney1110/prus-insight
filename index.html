@@ -74,7 +74,7 @@
   .cat-section-head .lab{font-family:var(--font-mono);font-size:0.78rem;color:var(--accent);letter-spacing:0.18em;text-transform:uppercase}
   .cat-section-head .ct{font-family:var(--font-mono);font-size:0.78rem;color:var(--muted);letter-spacing:0.12em}
 
-  .cards{display:grid;grid-template-columns:repeat(2,1fr);gap:2rem}
+  .cards{display:grid;grid-template-columns:repeat(2,1fr);gap:1.6rem}
   .card{
     position:relative;display:flex;flex-direction:column;
     padding:2.6rem 2.4rem 2.2rem;
@@ -108,6 +108,13 @@
   .card .desc{font-family:var(--font-serif);font-size:1.05rem;color:var(--ink-2);margin-top:1.4rem;line-height:1.55;max-width:38ch}
   .card .desc em{font-style:italic;color:var(--accent)}
 
+  .card.wide{grid-column:1/-1;min-height:auto;flex-direction:row;align-items:stretch;padding:2.4rem 2.6rem;gap:3rem}
+  .card.wide .left{flex:1.4;display:flex;flex-direction:column}
+  .card.wide .right{flex:1;display:flex;flex-direction:column;justify-content:space-between;border-left:1px solid var(--rule);padding-left:2.4rem}
+  .card.wide .top{margin-bottom:1.2rem}
+  .card.wide h2{font-size:2.4rem}
+  .card.wide .body-stats{border:none;padding:0;margin:0;grid-template-columns:repeat(3,1fr)}
+  .card.wide .go{margin-top:1.4rem}
   .card .body-stats{margin-top:auto;display:grid;grid-template-columns:repeat(2,1fr);gap:1rem;padding-top:1.8rem;border-top:1px solid var(--rule)}
   .card .ms{padding:0}
   .card .ms .mlbl{font-family:var(--font-mono);font-size:0.66rem;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase}
@@ -157,7 +164,7 @@
     <div>
       <div class="eyebrow">Portal Index · B2B Insight Edition</div>
       <h1>분양 시장의<br/>모든 <em>신호</em>를<br/>한 곳에서.</h1>
-      <p class="kicker">2017년부터 누적된 256만 부스 응답과 1,436만 설문 답변. 두 갈래의 인사이트로 탐색하세요.</p>
+      <p class="kicker">2017년부터 누적된 256만 부스 응답과 1,436만 설문 답변. 네 갈래의 인사이트로 탐색하세요.</p>
     </div>
     <aside class="right">
       <dl class="meta-list">
@@ -192,7 +199,7 @@
   <!-- CATEGORY CARDS -->
   <section class="cat-section">
     <div class="cat-section-head">
-      <span class="lab">Explore · 2 Categories</span>
+      <span class="lab">Explore · 4 Insights + 1 Tool</span>
       <span class="ct">선택 → 상세 대시보드</span>
     </div>
 
@@ -234,12 +241,12 @@
         </div>
         <h2><em>고객 설문</em><br/>인사이트</h2>
         <div class="en">CUSTOMER SURVEY INSIGHT</div>
-        <p class="desc">256만 응답자의 인구통계, 청약통장, 평형 선호, 수요 흐름, 슈퍼방문자 분석. <em>1,795,000+</em> 표준 설문 응답 기반.</p>
+        <p class="desc">256만 응답자의 인구통계, 청약통장, 평형 선호, 고령화 트렌드, 골든타임 분석. <em>13개 섹션</em>으로 구성.</p>
         <div class="tags">
           <span>응답자 프로파일</span>
           <span>평형 선호</span>
-          <span>수요 흐름 지도</span>
-          <span>슈퍼방문자</span>
+          <span>고령화 트렌드</span>
+          <span>골든타임</span>
         </div>
         <div class="body-stats">
           <div class="ms">
@@ -254,6 +261,95 @@
         <div class="go">
           <span class="pill">View Dashboard</span>
           <span class="arr">→</span>
+        </div>
+      </a>
+
+      <a class="card" href="./region/index.html">
+        <div class="top">
+          <div class="num">CATEGORY 03</div>
+          <div class="icon">R</div>
+        </div>
+        <h2><em>지역</em><br/>인텔리전스</h2>
+        <div class="en">REGIONAL INTELLIGENCE</div>
+        <p class="desc">17개 시도 활동량·만족도·10년 트렌드. <em>수요 흐름 매트릭스</em>와 시도별 지배 브랜드 TOP3.</p>
+        <div class="tags">
+          <span>시도 KPI</span>
+          <span>10년 트렌드</span>
+          <span>수요 흐름</span>
+          <span>지역 #1 브랜드</span>
+        </div>
+        <div class="body-stats">
+          <div class="ms">
+            <div class="mlbl">Sido Covered</div>
+            <div class="mval">17</div>
+          </div>
+          <div class="ms">
+            <div class="mlbl">Pre-Sale Sites</div>
+            <div class="mval">5,736</div>
+          </div>
+        </div>
+        <div class="go">
+          <span class="pill">View Dashboard</span>
+          <span class="arr">→</span>
+        </div>
+      </a>
+
+      <a class="card" href="./super/index.html">
+        <div class="top">
+          <div class="num">CATEGORY 04</div>
+          <div class="icon">S</div>
+        </div>
+        <h2><em>슈퍼</em><br/>방문자</h2>
+        <div class="en">SUPER VISITOR INTELLIGENCE</div>
+        <p class="desc">10+ 현장 방문 진성 매수 시그널 <em>5,447명</em>의 행동 분석. 브랜드·지역 선호, 별점 패턴.</p>
+        <div class="tags">
+          <span>슈퍼방문자 분포</span>
+          <span>브랜드 어피니티</span>
+          <span>지역 집중</span>
+          <span>이상 응답 탐지</span>
+        </div>
+        <div class="body-stats">
+          <div class="ms">
+            <div class="mlbl">Super Visitors</div>
+            <div class="mval">5,447</div>
+          </div>
+          <div class="ms">
+            <div class="mlbl">Max Visits (1명)</div>
+            <div class="mval">183</div>
+          </div>
+        </div>
+        <div class="go">
+          <span class="pill">View Dashboard</span>
+          <span class="arr">→</span>
+        </div>
+      </a>
+
+      <a class="card wide" href="./map/site/index.html">
+        <div class="left">
+          <div class="top">
+            <div class="num">TOOL · INTERACTIVE</div>
+            <div class="icon">M</div>
+          </div>
+          <h2><em>분양현장</em> 지도</h2>
+          <div class="en">PRE-SALE SITES MAP</div>
+          <p class="desc">5,736개 분양현장의 지리적 분포를 카카오맵 위에서 탐색. <em>지역·진행상태·브랜드</em>로 필터링, 현장 클릭 시 상세 정보 패널.</p>
+          <div class="tags">
+            <span>카카오맵</span>
+            <span>실시간 필터</span>
+            <span>현장 상세 정보</span>
+            <span>인터랙티브 탐색</span>
+          </div>
+        </div>
+        <div class="right">
+          <div class="body-stats">
+            <div class="ms"><div class="mlbl">Sites Mapped</div><div class="mval">5,736</div></div>
+            <div class="ms"><div class="mlbl">Engine</div><div class="mval" style="font-size:1.1rem;font-family:var(--font-mono);letter-spacing:0.04em">Kakao</div></div>
+            <div class="ms"><div class="mlbl">Type</div><div class="mval" style="font-size:1.1rem;font-family:var(--font-mono);letter-spacing:0.04em">Visual</div></div>
+          </div>
+          <div class="go">
+            <span class="pill">Open Map</span>
+            <span class="arr">→</span>
+          </div>
         </div>
       </a>
 
