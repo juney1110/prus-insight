@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>피알어스 분양현장 지도 대시보드</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/MarkerCluster.min.css"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/MarkerCluster.Default.min.css"/>
+<style>
+:root{
+  --bg:#0f1419; --panel:#161c24; --panel2:#1c242e; --line:#27313d;
+  --txt:#e7edf3; --muted:#8a97a6; --accent:#3aa0ff; --accent2:#16c79a;
+  --warn:#ffb547; --dim:#5a6675; --end:#6b7785;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;font-family:'Pretendard','Apple SD Gothic Neo',-apple-system,'Malgun Gothic',sans-serif;background:var(--bg);color:var(--txt)}
+#app{display:grid;grid-template-columns:320px 1fr;grid-template-rows:56px 1fr;height:100vh}
+header{grid-column:1/3;display:flex;align-items:center;gap:14px;padding:0 18px;background:var(--panel);border-bottom:1px solid var(--line)}
+header h1{font-size:15px;margin:0;font-weight:700;letter-spacing:-.3px}
+header .badge{font-size:11px;color:var(--muted);background:var(--panel2);padding:3px 9px;border-radius:20px;border:1px solid var(--line)}
+header .spacer{flex:1}
+header .kpi{display:flex;gap:18px}
+header .kpi div{font-size:11px;color:var(--muted);text-align:right}
+header .kpi b{display:block;font-size:17px;color:var(--txt);font-weight:700}
+header .kpi b.ac{color:var(--accent)} header .kpi b.gr{color:var(--accent2)}
+aside{background:var(--panel);border-right:1px solid var(--line);overflow-y:auto;padding:16px}
+aside h2{font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin:18px 0 8px}
+aside h2:first-child{margin-top:0}
+.field input,.field select{width:100%;background:var(--panel2);border:1px solid var(--line);color:var(--txt);padding:9px 10px;border-radius:8px;font-size:13px;outline:none}
+.field input:focus,.field select:focus{border-color:var(--accent)}
+.field{margin-bottom:10px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font-size:12px;padding:5px 10px;border-radius:18px;background:var(--panel2);border:1px solid var(--line);color:var(--muted);cursor:pointer;user-select:none}
+.chip.on{background:var(--accent);border-color:var(--accent);color:#04121f;font-weight:600}
+.chip.s-end.on{background:var(--end);border-color:var(--end)}
+.chip.s-now.on{background:var(--accent2);border-color:var(--accent2)}
+.chip.s-plan.on{background:var(--warn);border-color:var(--warn);color:#2a1c00}
+.barlist{margin-top:6px}
+.barrow{margin:6px 0;cursor:pointer}
+.barrow .t{display:flex;justify-content:space-between;font-size:12px;margin-bottom:3px}
+.barrow .t span:last-child{color:var(--muted)}
+.bar{height:6px;background:var(--panel2);border-radius:4px;overflow:hidden}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2))}
+#map{height:100%;width:100%;background:#0f1419}
+.leaflet-tile{filter:invert(1) hue-rotate(185deg) brightness(.95) contrast(.92) saturate(.85);}
+main{position:relative}
+.legend{position:absolute;bottom:18px;left:18px;z-index:500;background:rgba(22,28,36,.92);border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-size:12px;backdrop-filter:blur(6px)}
+.legend div{display:flex;align-items:center;gap:7px;margin:3px 0;color:var(--muted)}
+.legend .dot{width:10px;height:10px;border-radius:50%}
+.drawer{position:absolute;top:14px;right:14px;width:320px;max-height:calc(100% - 28px);z-index:600;background:rgba(22,28,36,.97);border:1px solid var(--line);border-radius:12px;padding:0;overflow:hidden;display:none;flex-direction:column;box-shadow:0 12px 40px rgba(0,0,0,.5)}
+.drawer.show{display:flex}
+.drawer .dh{padding:14px 16px;border-bottom:1px solid var(--line);background:var(--panel2)}
+.drawer .dh h3{margin:0 0 4px;font-size:15px}
+.drawer .dh .sub{font-size:12px;color:var(--muted)}
+.drawer .db{padding:14px 16px;overflow-y:auto;font-size:13px}
+.drawer .row{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px dashed var(--line)}
+.drawer .row span:first-child{color:var(--muted)}
+.drawer .greet{margin-top:10px;font-size:12px;color:var(--muted);line-height:1.55;background:var(--bg);padding:10px;border-radius:8px;border:1px solid var(--line)}
+.drawer .close{position:absolute;top:10px;right:12px;cursor:pointer;color:var(--muted);font-size:18px;z-index:2}
+.tag{display:inline-block;font-size:11px;padding:2px 8px;border-radius:6px;font-weight:600}
+.tag.end{background:#2a323c;color:#9aa7b5}.tag.now{background:#0f3b32;color:#16c79a}.tag.plan{background:#3b2e10;color:#ffb547}.tag.soon{background:#10283b;color:#3aa0ff}
+.note{font-size:11px;color:var(--dim);margin-top:14px;line-height:1.5}
+.reset{width:100%;margin-top:6px;background:var(--panel2);border:1px solid var(--line);color:var(--muted);padding:8px;border-radius:8px;cursor:pointer;font-size:12px}
+.reset:hover{color:var(--txt);border-color:var(--accent)}
+</style>
+</head>
+<body>
+<div id="app">
+  <header>
+    <h1>피알어스 · 분양현장 지도 대시보드</h1>
+    <span class="badge" id="genBadge"></span>
+    <div class="spacer"></div>
+    <div class="kpi">
+      <div>표시 현장<b class="ac" id="kVisible">0</b></div>
+      <div>진행/예정<b class="gr" id="kActive">0</b></div>
+      <div>총 세대<b id="kUnits">0</b></div>
+    </div>
+  </header>
+  <aside>
+    <h2>검색</h2>
+    <div class="field"><input id="q" placeholder="현장명 · 브랜드 · 시공사"/></div>
+    <h2>상태</h2>
+    <div class="chips" id="statusChips">
+      <span class="chip s-now on" data-s="진행중">진행중</span>
+      <span class="chip s-plan on" data-s="예정">예정</span>
+      <span class="chip on" data-s="진행예정">미정</span>
+      <span class="chip s-end on" data-s="종료">종료</span>
+    </div>
+    <h2>시·도</h2>
+    <div class="field"><select id="sido"><option value="">전체</option></select></div>
+    <h2>분양 시작연도</h2>
+    <div class="field"><select id="year"><option value="">전체 연도</option></select></div>
+    <button class="reset" id="resetBtn">필터 초기화</button>
+    <h2>지역 분포 (상위)</h2>
+    <div class="barlist" id="regionBars"></div>
+    <h2>브랜드 분포 (상위)</h2>
+    <div class="barlist" id="brandBars"></div>
+    <div class="note" id="note"></div>
+  </aside>
+  <main>
+    <div id="map"></div>
+    <div class="legend">
+      <div><span class="dot" style="background:#16c79a"></span>진행중</div>
+      <div><span class="dot" style="background:#ffb547"></span>예정</div>
+      <div><span class="dot" style="background:#3aa0ff"></span>미정</div>
+      <div><span class="dot" style="background:#6b7785"></span>종료</div>
+    </div>
+    <div class="drawer" id="drawer">
+      <span class="close" id="drawerClose">×</span>
+      <div class="dh"><h3 id="dName"></h3><div class="sub" id="dSub"></div></div>
+      <div class="db" id="dBody"></div>
+    </div>
+  </main>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/leaflet.markercluster.min.js"></script>
+<script src="sites.js"></script>
+<script>
+const DATA=window.SITE_DATA;
+const SITES=DATA.sites.filter(s=>!s.hidden);
+const COLOR={"진행중":"#16c79a","예정":"#ffb547","진행예정":"#3aa0ff","종료":"#6b7785"};
+const TAGCLS={"진행중":"now","예정":"plan","진행예정":"soon","종료":"end"};
+document.getElementById('genBadge').textContent='생성 '+DATA.generated+' · 원본 '+DATA.total.toLocaleString()+'건';
+
+const map=L.map('map',{preferCanvas:true}).setView([36.5,127.8],7);
+L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{
+  attribution:'© OpenStreetMap 기여자 (한국어)',maxZoom:19,crossOrigin:true}).addTo(map);
+const cluster=L.markerClusterGroup({chunkedLoading:true,maxClusterRadius:55,spiderfyOnMaxZoom:true});
+map.addLayer(cluster);
+
+const state={q:"",sido:"",year:"",status:new Set(["진행중","예정","진행예정","종료"])};
+
+// populate selects
+const sidos=[...new Set(SITES.map(s=>s.sido).filter(Boolean))].sort();
+const selSido=document.getElementById('sido');
+sidos.forEach(s=>{let o=document.createElement('option');o.value=s;o.textContent=s;selSido.appendChild(o)});
+const years=[...new Set(SITES.map(s=>s.year).filter(Boolean))].sort((a,b)=>b-a);
+const selYear=document.getElementById('year');
+years.forEach(y=>{let o=document.createElement('option');o.value=y;o.textContent=y+'년';selYear.appendChild(o)});
+
+function match(s){
+  if(!state.status.has(s.status))return false;
+  if(state.sido&&s.sido!==state.sido)return false;
+  if(state.year&&String(s.year)!==state.year)return false;
+  if(state.q){const q=state.q.toLowerCase();
+    if(!((s.name||"").toLowerCase().includes(q)||(s.brand||"").toLowerCase().includes(q)||(s.builder||"").toLowerCase().includes(q)))return false;}
+  return true;
+}
+function fmt(n){return n?Number(n).toLocaleString():"-";}
+
+function render(){
+  cluster.clearLayers();
+  const vis=SITES.filter(match);
+  const markers=[];
+  let units=0,active=0;
+  const regCnt={},brCnt={};
+  for(const s of vis){
+    units+=s.units||0;
+    if(s.status==="진행중"||s.status==="예정")active++;
+    const rk=s.region||s.sido||"기타"; regCnt[rk]=(regCnt[rk]||0)+1;
+    const bk=s.brand||"기타"; brCnt[bk]=(brCnt[bk]||0)+1;
+    const m=L.circleMarker([s.lat,s.lng],{radius:6,weight:1.5,color:'#0b0f14',
+      fillColor:COLOR[s.status]||'#888',fillOpacity:.92});
+    m.on('click',()=>openDrawer(s));
+    markers.push(m);
+  }
+  cluster.addLayers(markers);
+  document.getElementById('kVisible').textContent=vis.length.toLocaleString();
+  document.getElementById('kActive').textContent=active.toLocaleString();
+  document.getElementById('kUnits').textContent=fmt(units);
+  bars('regionBars',regCnt,v=>{state.sido="";selSido.value="";state.q=v;document.getElementById('q').value=v;render();});
+  bars('brandBars',brCnt,v=>{document.getElementById('q').value=v;state.q=v;render();});
+}
+function bars(id,obj,onclick){
+  const arr=Object.entries(obj).sort((a,b)=>b[1]-a[1]).slice(0,8);
+  const max=arr.length?arr[0][1]:1;
+  const el=document.getElementById(id);el.innerHTML="";
+  for(const[k,v]of arr){
+    const d=document.createElement('div');d.className='barrow';
+    d.innerHTML=`<div class="t"><span>${k}</span><span>${v}</span></div><div class="bar"><i style="width:${Math.max(4,100*v/max)}%"></i></div>`;
+    el.appendChild(d);
+  }
+}
+function openDrawer(s){
+  document.getElementById('dName').textContent=s.name;
+  document.getElementById('dSub').innerHTML=`<span class="tag ${TAGCLS[s.status]}">${s.status}</span> &nbsp;${s.region||s.location||""}`;
+  const rows=[["브랜드",s.brand],["시공사",s.builder],["시행사",s.developer],["분양대행",s.agency],
+    ["규모",s.scale],["세대수",s.units?s.units.toLocaleString()+"세대":""],
+    ["분양기간",(s.start||"?")+" ~ "+(s.end||"?")],["책임자",s.manager],["연락처",s.phone],
+    ["주소",s.location]];
+  let h="";
+  for(const[k,v]of rows){if(v)h+=`<div class="row"><span>${k}</span><span>${v}</span></div>`;}
+  if(s.greeting)h+=`<div class="greet">${s.greeting}</div>`;
+  h+=`<div class="note">좌표 정밀도: ${({alias:'신도시/지구',gu:'자치구',sigungu:'시·군·구',sido:'시·도(개략)'})[s.geolevel]||s.geolevel} 단위 (기준: ${s.matched})</div>`;
+  document.getElementById('dBody').innerHTML=h;
+  document.getElementById('drawer').classList.add('show');
+  map.panTo([s.lat,s.lng]);
+}
+document.getElementById('drawerClose').onclick=()=>document.getElementById('drawer').classList.remove('show');
+
+// events
+let qt;document.getElementById('q').addEventListener('input',e=>{clearTimeout(qt);qt=setTimeout(()=>{state.q=e.target.value.trim();render();},220);});
+selSido.addEventListener('change',e=>{state.sido=e.target.value;render();});
+selYear.addEventListener('change',e=>{state.year=e.target.value;render();});
+document.querySelectorAll('#statusChips .chip').forEach(c=>{
+  c.addEventListener('click',()=>{const s=c.dataset.s;if(state.status.has(s)){state.status.delete(s);c.classList.remove('on');}else{state.status.add(s);c.classList.add('on');}render();});
+});
+document.getElementById('resetBtn').onclick=()=>{
+  state.q="";state.sido="";state.year="";state.status=new Set(["진행중","예정","진행예정","종료"]);
+  document.getElementById('q').value="";selSido.value="";selYear.value="";
+  document.querySelectorAll('#statusChips .chip').forEach(c=>c.classList.add('on'));render();
+};
+const noGeo=DATA.total-SITES.filter(s=>true).length;
+document.getElementById('note').innerHTML=
+  `· 숨김 처리 제외 후 <b>${SITES.length.toLocaleString()}</b>개 현장 표시<br>`+
+  `· 좌표는 행정구역 중심 기반 <b>근사값</b> (프로토타입). 정밀 핀은 카카오/VWorld 지오코딩 연동 시 가능.`;
+render();
+</script>
+</body>
+</html>
