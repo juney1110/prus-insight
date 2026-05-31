@@ -7,6 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT,WONK@9..144,300..900,0..100,0..1&family=Noto+Serif+KR:wght@300;400;600;700;900&family=IBM+Plex+Sans+KR:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<script src="../auth.js"></script>
 <style>
   :root{
     --bg:#F4EFE6;
@@ -42,6 +43,12 @@
   .brand{display:flex;align-items:baseline;gap:0.6rem;font-family:var(--font-serif);font-weight:600;font-size:1.15rem;letter-spacing:-0.01em}
   .brand .mark{display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--accent);transform:translateY(1px)}
   .brand small{font-family:var(--font-sans);font-weight:400;font-size:0.78rem;color:var(--muted);letter-spacing:0.04em;text-transform:uppercase;margin-left:0.4rem}
+  a.brand{text-decoration:none;color:inherit}
+  .brand .back-arr{font-family:var(--font-mono);font-size:0.95rem;color:var(--muted);margin-right:0.15rem;transition:transform .25s ease, color .25s ease;display:inline-block}
+  a.brand:hover .back-arr{transform:translateX(-5px);color:var(--accent)}
+  a.brand:hover .mark{transform:translateY(1px) scale(1.2)}
+  .brand .mark{transition:transform .25s ease}
+  .crumb{font-family:var(--font-mono);font-size:0.7rem;color:var(--accent);letter-spacing:0.14em;text-transform:uppercase;margin-left:0.6rem;padding-left:0.6rem;border-left:1px solid var(--rule)}
   .nav{display:flex;gap:1.4rem;font-size:0.8rem;color:var(--ink-2);letter-spacing:0.02em}
   .nav a{color:inherit;text-decoration:none;border-bottom:1px solid transparent;padding-bottom:2px;transition:border-color .15s}
   .nav a:hover{border-bottom-color:var(--accent)}
@@ -272,11 +279,13 @@
 
 <header class="topbar">
   <div class="topbar-inner">
-    <div class="brand">
+    <a class="brand" href="../index.html" title="포털 인덱스로 돌아가기">
+      <span class="back-arr">←</span>
       <span class="mark"></span>
       PRUS Insight
       <small>v0.2 · Apartment Pre-Sale Intelligence</small>
-    </div>
+      <span class="crumb">Customer</span>
+    </a>
     <nav class="nav">
       <a href="#brand">Brand</a>
       <a href="#trend">Trend</a>
