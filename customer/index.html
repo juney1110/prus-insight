@@ -251,6 +251,45 @@
   footer{margin-top:4rem;padding:3rem 2rem 2rem;border-top:1px solid var(--rule);max-width:1320px;margin-left:auto;margin-right:auto;display:grid;grid-template-columns:1fr auto;gap:2rem;align-items:end;font-family:var(--font-mono);font-size:0.75rem;color:var(--muted);letter-spacing:0.04em}
   footer .mark{font-family:var(--font-serif);font-style:italic;color:var(--ink);font-size:1rem;letter-spacing:-0.01em}
 
+  /* DNA Cards (Section 10) */
+  .dna-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:1rem}
+  .dna{border:1px solid var(--rule);background:rgba(255,253,247,0.5);padding:1.4rem 1.2rem;position:relative;display:flex;flex-direction:column}
+  .dna h4{font-family:var(--font-serif);font-weight:400;font-size:1.2rem;letter-spacing:-0.01em;font-variation-settings:"opsz" 48;line-height:1.15}
+  .dna .builder{font-family:var(--font-mono);font-size:0.65rem;color:var(--muted);letter-spacing:0.08em;margin-top:0.2rem;text-transform:uppercase}
+  .dna .metric{margin-top:1rem;position:relative}
+  .dna .metric .mlbl{font-family:var(--font-mono);font-size:0.6rem;color:var(--muted);letter-spacing:0.12em;text-transform:uppercase;display:flex;justify-content:space-between}
+  .dna .metric .mlbl em{color:var(--ink-2);font-style:normal}
+  .dna .metric .mval{font-family:var(--font-serif);font-size:1.55rem;font-variation-settings:"opsz" 60;line-height:1;margin-top:0.3rem;color:var(--ink)}
+  .dna .metric .mval small{font-size:0.65rem;color:var(--muted);font-family:var(--font-mono);margin-left:0.25rem;letter-spacing:0.04em}
+  .dna .metric .bar{height:5px;background:var(--rule);margin-top:0.45rem;position:relative;overflow:hidden}
+  .dna .metric .bar > span{position:absolute;left:0;top:0;height:100%;background:var(--accent-2)}
+  .dna .metric.hi .bar > span{background:var(--accent)}
+  .dna .metric .avg{position:absolute;top:0;height:11px;width:1px;background:var(--ink);opacity:0.45;margin-top:0.45rem}
+  .dna .tagline{margin-top:auto;padding-top:1rem;border-top:1px dashed var(--rule);font-family:var(--font-serif);font-style:italic;font-size:0.82rem;color:var(--ink-2);line-height:1.4;min-height:3em}
+  .dna .tagline strong{color:var(--accent);font-style:normal;font-weight:600}
+
+  /* Heatmap (Section 11) */
+  .heat-wrap{display:grid;grid-template-columns:1.5fr 1fr;gap:3rem;align-items:start}
+  .heat{display:grid;grid-template-columns:42px repeat(13,1fr);gap:3px}
+  .heat .hcell{aspect-ratio:1;display:flex;align-items:center;justify-content:center;font-family:var(--font-mono);font-size:0.6rem;color:rgba(255,255,255,0.92);position:relative;text-shadow:0 1px 1px rgba(0,0,0,0.18)}
+  .heat .hcell.head{background:transparent !important;color:var(--muted);font-size:0.65rem;letter-spacing:0.04em;text-shadow:none;aspect-ratio:auto;padding:0.2rem 0}
+  .heat .hcell.row-head{justify-self:end;padding-right:0.5rem;background:transparent !important;color:var(--muted);text-align:right;aspect-ratio:auto;font-size:0.78rem;text-shadow:none}
+  .heat .hcell.row-head.peak-row{color:var(--accent);font-weight:600;font-family:var(--font-serif)}
+  .heat .hcell.peak{outline:2px solid var(--accent);outline-offset:-1px;z-index:2}
+  .heat-legend{display:flex;align-items:center;gap:0.7rem;margin-top:1.2rem;font-family:var(--font-mono);font-size:0.7rem;color:var(--muted)}
+  .heat-legend .scale{display:flex;height:10px;width:160px;border:1px solid var(--rule)}
+  .heat-legend .scale span{flex:1;display:block}
+  .heat-callouts{display:flex;flex-direction:column;gap:1.2rem}
+
+  /* Aging Trend (Section 12) */
+  .aging{display:grid;grid-template-columns:1fr 280px;gap:3rem;align-items:start}
+  .aging-chart{border:1px solid var(--rule);background:rgba(255,253,247,0.3);padding:1.5rem 1.5rem 1rem}
+  .aging-chart svg{display:block;width:100%;height:420px}
+  .aging-side{display:flex;flex-direction:column;gap:1.8rem}
+  .legend-vert{display:flex;flex-direction:column;gap:0.55rem;font-family:var(--font-mono);font-size:0.72rem;padding:1rem 1.2rem;background:var(--bg-alt);border-radius:2px}
+  .legend-vert > div{display:flex;align-items:center;gap:0.6rem;color:var(--ink-2)}
+  .legend-vert i{width:14px;height:14px;display:inline-block;flex-shrink:0}
+
   @media (max-width:1100px){
     .smalls{grid-template-columns:repeat(2,1fr)}
     .masthead{grid-template-columns:1fr;gap:2rem}
@@ -295,6 +334,9 @@
       <a href="#flow">Flow</a>
       <a href="#super">Super</a>
       <a href="#region">Region</a>
+      <a href="#dna">DNA</a>
+      <a href="#golden">Golden</a>
+      <a href="#aging">Aging</a>
       <a href="#use">Pricing</a>
     </nav>
     <span class="badge-live">LIVE · 2026 Q2</span>
@@ -642,10 +684,93 @@
   <div class="questions" id="questions-grid"></div>
 </section>
 
-<!-- 10 USE CASES -->
+<!-- 10 BRAND DNA CARDS -->
+<section class="section" id="dna">
+  <div class="section-head">
+    <div class="num">10 / Brand DNA Cards</div>
+    <h2>10대 브랜드의 <em>인구통계 DNA</em><br/>여성 비율 · 50대+ 비중 비교</h2>
+    <div class="lede">N = 198,634 응답 (성별·연령 표준질문 기반). 시장 평균 대비 각 브랜드 포지션.</div>
+  </div>
+  <div class="dna-grid" id="dnaGrid"></div>
+</section>
+
+<!-- 11 GOLDEN TIME HEATMAP -->
+<section class="section" id="golden">
+  <div class="section-head">
+    <div class="num">11 / Golden Time Heatmap</div>
+    <h2>가장 진한 셀이<br/><em>가장 큰 기회</em></h2>
+    <div class="lede">요일 × 시간대 응답수 매트릭스. 부스 운영시간·인력배치·SMS 발송 타이밍 의사결정용.</div>
+  </div>
+  <div class="heat-wrap">
+    <div>
+      <div class="heat" id="heat"></div>
+      <div class="heat-legend">
+        <span>적음</span>
+        <div class="scale" id="heatScale"></div>
+        <span>많음 · 셀에 마우스 올리면 정확한 수치</span>
+      </div>
+    </div>
+    <div class="heat-callouts">
+      <div class="callout">
+        <div class="cnum">67,539</div>
+        <div class="ctit">토요일 14시 — 단일 골든타임</div>
+        <div class="cbody">전 셀 중 최대치. 토 13~15시 3시간이 전체의 8.4% 집중. 분양 부스 핵심 운영 시간.</div>
+      </div>
+      <div class="callout">
+        <div class="cnum">+8% 평일</div>
+        <div class="ctit">화·수·금 14시 의외의 강세</div>
+        <div class="cbody">평일 응답이 평일 평균보다 8% 이상 높음. 점심 직후가 의외의 골든 윈도우. 평일 SMS 발송 최적 타이밍.</div>
+      </div>
+      <div class="callout">
+        <div class="cnum">−32%</div>
+        <div class="ctit">일요일 상대적 약세</div>
+        <div class="cbody">토요일 대비 32% 적음. 일요일은 가족 외출보다 휴식 비중이 큰 것으로 추정. 일요일 인력 최소화 가능.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 12 AGING TREND -->
+<section class="section" id="aging">
+  <div class="section-head">
+    <div class="num">12 / Aging Trend</div>
+    <h2>분양시장의 <em>고령화</em><br/>10년 인구 구조 변화</h2>
+    <div class="lede">2017 → 2025: 30대 비중 반토막, 60대+ 2배 증가. 한국 분양시장의 가장 큰 구조적 변화.</div>
+  </div>
+  <div class="aging">
+    <div class="aging-chart">
+      <svg id="agingSvg" viewBox="0 0 720 420" preserveAspectRatio="none"></svg>
+    </div>
+    <div class="aging-side">
+      <div class="annotations">
+        <div class="annot">
+          <div class="date">2017 → 2025</div>
+          <div class="body"><strong>30대 비중 17.8% → 9.2%</strong> 거의 반토막. 청년층 분양 관심 급감.</div>
+        </div>
+        <div class="annot">
+          <div class="date">2017 → 2025</div>
+          <div class="body"><strong>60대+ 비중 15.0% → 32.0%</strong> 2배 이상 증가. 베이비부머 매수세 본격화.</div>
+        </div>
+        <div class="annot">
+          <div class="date">2025</div>
+          <div class="body"><strong>50대+ 합계 72.6%</strong>. 분양시장 절대다수가 50대 이상으로 굳어짐.</div>
+        </div>
+      </div>
+      <div class="legend-vert">
+        <div><i style="background:#D6CFBE"></i> 20대 이하</div>
+        <div><i style="background:#A8B5A0"></i> 30대</div>
+        <div><i style="background:#7A9080"></i> 40대</div>
+        <div><i style="background:#C77B69"></i> 50대</div>
+        <div><i style="background:#B8482B"></i> 60대 이상</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 13 USE CASES -->
 <section class="section" id="use">
   <div class="section-head">
-    <div class="num">10 / Pricing &amp; Use Cases</div>
+    <div class="num">13 / Pricing &amp; Use Cases</div>
     <h2>누가, <em>왜</em>,<br/>이 데이터를 구독하는가</h2>
     <div class="lede">3가지 구독 티어. 모든 데이터는 집계·익명화 처리.</div>
   </div>
@@ -1103,6 +1228,190 @@ function renderSuper(){
   svg.innerHTML = yaxis + bars;
 }
 renderSuper();
+
+// ============================================================
+// DNA CARDS (Section 10)
+// ============================================================
+const DNA = [
+  // [brand, builder, female%, 50+%]
+  ["힐스테이트","현대건설",   65.80, 66.79],
+  ["자이","GS건설",          65.02, 62.71],
+  ["e편한세상","DL이앤씨",   66.20, 63.00],
+  ["롯데캐슬","롯데건설",     70.26, 70.70],
+  ["푸르지오","대우건설",     70.07, 65.66],
+  ["더샵","포스코이앤씨",     67.75, 63.64],
+  ["제일풍경채","제일건설",   65.22, 65.81],
+  ["아이파크","HDC현산",     69.34, 62.80],
+  ["호반써밋","호반건설",     65.43, 70.40],
+  ["대광로제비앙","대광건영", null,  80.78],
+];
+const DNA_AVG_F = 66.7;
+const DNA_AVG_50P = 66.0;
+
+function renderDNA(){
+  const wrap = document.getElementById('dnaGrid');
+  DNA.forEach(([brand,builder,f,o])=>{
+    const fHi = f !== null && f >= DNA_AVG_F + 2;
+    const oHi = o >= DNA_AVG_50P + 3;
+    const oLo = o <= DNA_AVG_50P - 3;
+    let tag = '';
+    if (o >= 75) tag = '<strong>극심한 고령</strong> · 베이비부머 집중';
+    else if (oHi) tag = '<strong>고령 편향</strong> · 5060 메인';
+    else if (oLo) tag = '<strong>젊은 브랜드</strong> · 2030~40 강세';
+    else if (fHi) tag = '<strong>여성 편향 강함</strong> · 인테리어 마케팅 효과';
+    else tag = '시장 평균 근접 · 균형 포지션';
+
+    const fAvgPos = DNA_AVG_F;
+    const oAvgPos = DNA_AVG_50P;
+
+    wrap.insertAdjacentHTML('beforeend', `
+      <div class="dna">
+        <h4>${brand}</h4>
+        <div class="builder">${builder}</div>
+
+        <div class="metric ${fHi?'hi':''}">
+          <div class="mlbl"><span>FEMALE</span><em>평균 ${DNA_AVG_F}%</em></div>
+          <div class="mval">${f!==null?f.toFixed(1):'—'}<small>%</small></div>
+          <div class="bar">
+            <span style="width:${f||0}%"></span>
+            <span class="avg" style="left:${fAvgPos}%"></span>
+          </div>
+        </div>
+
+        <div class="metric ${oHi?'hi':''}">
+          <div class="mlbl"><span>50대+</span><em>평균 ${DNA_AVG_50P}%</em></div>
+          <div class="mval">${o.toFixed(1)}<small>%</small></div>
+          <div class="bar">
+            <span style="width:${o}%"></span>
+            <span class="avg" style="left:${oAvgPos}%"></span>
+          </div>
+        </div>
+
+        <div class="tagline">${tag}</div>
+      </div>
+    `);
+  });
+}
+renderDNA();
+
+// ============================================================
+// GOLDEN TIME HEATMAP (Section 11)
+// ============================================================
+const HEAT = [
+  [1,9,164],[1,10,7622],[1,11,15681],[1,12,25375],[1,13,43296],[1,14,48136],[1,15,45981],[1,16,40108],[1,17,34198],[1,18,26772],[1,19,14071],[1,20,2875],[1,21,622],
+  [2,9,485],[2,10,8333],[2,11,18140],[2,12,32637],[2,13,53890],[2,14,58126],[2,15,55472],[2,16,48968],[2,17,41505],[2,18,33017],[2,19,17873],[2,20,3758],[2,21,1043],
+  [3,9,466],[3,10,8436],[3,11,18284],[3,12,31513],[3,13,52108],[3,14,54964],[3,15,54239],[3,16,47310],[3,17,40729],[3,18,31825],[3,19,17582],[3,20,3992],[3,21,996],
+  [4,9,242],[4,10,7119],[4,11,15599],[4,12,27520],[4,13,46104],[4,14,48648],[4,15,47805],[4,16,43150],[4,17,36171],[4,18,28352],[4,19,15373],[4,20,3579],[4,21,845],
+  [5,9,404],[5,10,8630],[5,11,18259],[5,12,30441],[5,13,52826],[5,14,55690],[5,15,54417],[5,16,48097],[5,17,40379],[5,18,32509],[5,19,17680],[5,20,3929],[5,21,1122],
+  [6,9,478],[6,10,9012],[6,11,18830],[6,12,31799],[6,13,53778],[6,14,57611],[6,15,57138],[6,16,49780],[6,17,42785],[6,18,35252],[6,19,19741],[6,20,4581],[6,21,1282],
+  [7,9,333],[7,10,11447],[7,11,23206],[7,12,38206],[7,13,64333],[7,14,67539],[7,15,65503],[7,16,58623],[7,17,50658],[7,18,40859],[7,19,22956],[7,20,5197],[7,21,1456],
+];
+function renderHeat(){
+  const wrap = document.getElementById('heat');
+  const dayNames = ['','일','월','화','수','목','금','토'];
+  const hours = [9,10,11,12,13,14,15,16,17,18,19,20,21];
+  const max = Math.max(...HEAT.map(h => h[2]));
+  const M = {};
+  HEAT.forEach(([d,h,n]) => { M[`${d}-${h}`] = n; });
+
+  let html = '<div class="hcell head"></div>';
+  hours.forEach(h => html += `<div class="hcell head">${h}</div>`);
+
+  for (let d=1; d<=7; d++){
+    html += `<div class="hcell row-head${d===7?' peak-row':''}">${dayNames[d]}</div>`;
+    hours.forEach(h => {
+      const n = M[`${d}-${h}`] || 0;
+      const intensity = Math.pow(n/max, 0.55);
+      const alpha = 0.06 + intensity * 0.88;
+      const isPeak = n === max;
+      const showLabel = n >= max*0.65;
+      const txt = showLabel ? Math.round(n/1000)+'K' : '';
+      html += `<div class="hcell${isPeak?' peak':''}" style="background:rgba(184,72,43,${alpha})" title="${dayNames[d]} ${h}시 — ${n.toLocaleString('ko-KR')}건">${txt}</div>`;
+    });
+  }
+  wrap.innerHTML = html;
+
+  const scale = document.getElementById('heatScale');
+  for (let i=0; i<10; i++){
+    const a = 0.06 + (i/9)*0.88;
+    scale.insertAdjacentHTML('beforeend', `<span style="background:rgba(184,72,43,${a})"></span>`);
+  }
+}
+renderHeat();
+
+// ============================================================
+// AGING TREND (Section 12)
+// ============================================================
+const AGING = [
+  [2017, 409, 5068, 8959, 9739, 4266],
+  [2018, 227, 2331, 4277, 5881, 3572],
+  [2019, 610, 7711, 12635, 19027, 9346],
+  [2020, 1919, 13464, 22030, 38268, 21982],
+  [2021, 2489, 15996, 24485, 43565, 24373],
+  [2022, 1673, 11204, 18646, 36200, 23895],
+  [2023, 1326, 11465, 18011, 38110, 20750],
+  [2024, 2146, 19046, 31991, 70113, 48486],
+  [2025, 1895, 18693, 35178, 82460, 65096],
+  [2026, 852, 8419, 15097, 33635, 25294],
+];
+function renderAging(){
+  const svg = document.getElementById('agingSvg');
+  const W=720, H=420, padL=44, padR=24, padT=24, padB=44;
+  const data = AGING;
+  const colors = ['#D6CFBE','#A8B5A0','#7A9080','#C77B69','#B8482B'];
+
+  const colW = (W - padL - padR) / data.length;
+  const barW = colW * 0.72;
+
+  let html = '';
+
+  // Y-axis grid
+  [0, 25, 50, 75, 100].forEach(p => {
+    const y = padT + (1 - p/100) * (H - padT - padB);
+    html += `<line x1="${padL}" y1="${y}" x2="${W-padR}" y2="${y}" stroke="#D6CFBE" stroke-width="0.6"/>`;
+    html += `<text x="${padL-8}" y="${y+3}" text-anchor="end" font-family="JetBrains Mono" font-size="9" fill="#857F70">${p}%</text>`;
+  });
+
+  // Stacked bars
+  const trendPts = [];
+  data.forEach((row, i) => {
+    const year = row[0];
+    const counts = row.slice(1);
+    const total = counts.reduce((s,c)=>s+c, 0);
+    const x = padL + colW*i + (colW-barW)/2;
+    let y = padT;
+
+    counts.forEach((c, gi) => {
+      const pct = c/total;
+      const h = pct * (H - padT - padB);
+      html += `<rect x="${x}" y="${y}" width="${barW}" height="${h}" fill="${colors[gi]}"/>`;
+      if (pct >= 0.08) {
+        const textColor = gi >= 3 ? '#fff' : '#1C1B17';
+        html += `<text x="${x + barW/2}" y="${y + h/2 + 3.5}" text-anchor="middle" font-family="JetBrains Mono" font-size="10" fill="${textColor}" opacity="0.95">${Math.round(pct*100)}%</text>`;
+      }
+      y += h;
+    });
+
+    // mark 50+ boundary point (top of 50대 segment)
+    const young = counts[0]+counts[1]+counts[2];
+    const yBoundary = padT + (young/total) * (H - padT - padB);
+    trendPts.push([x + barW/2, yBoundary]);
+
+    html += `<text x="${x + barW/2}" y="${H - padB + 22}" text-anchor="middle" font-family="JetBrains Mono" font-size="11" fill="#3D3A33" font-weight="500">${year}</text>`;
+  });
+
+  // 50+ trend line
+  const path = 'M ' + trendPts.map(p=>p.join(',')).join(' L ');
+  html += `<path d="${path}" stroke="#1C1B17" stroke-width="1.6" fill="none" stroke-dasharray="4 3" opacity="0.7"/>`;
+  trendPts.forEach(p => html += `<circle cx="${p[0]}" cy="${p[1]}" r="3" fill="#FAF6EC" stroke="#1C1B17" stroke-width="1.4"/>`);
+
+  // Trend annotation
+  const last = trendPts[trendPts.length-1];
+  html += `<text x="${last[0]-10}" y="${last[1]-10}" text-anchor="end" font-family="Fraunces" font-style="italic" font-size="11" fill="#1C1B17" opacity="0.85">↑ 50대 미만 경계선</text>`;
+
+  svg.innerHTML = html;
+}
+renderAging();
 
 </script>
 </body>
